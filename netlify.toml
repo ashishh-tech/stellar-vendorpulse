@@ -1,5 +1,6 @@
 [build]
   command = "npm run build"
+  publish = "out"
 
 [build.environment]
   NODE_VERSION = "20"
@@ -12,3 +13,8 @@
   NEXT_PUBLIC_REVIEW_SYSTEM_CONTRACT_ID = ""
   NEXT_PUBLIC_APP_NAME = "VendorPulse"
   NPM_FLAGS = "--legacy-peer-deps"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
