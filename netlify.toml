@@ -1,0 +1,11 @@
+[build]
+  command = "npm run build"
+  publish = ".next"
+
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
+
+[build.environment]
+  NEXT_PUBLIC_STELLAR_NETWORK = "testnet"
+  NEXT_PUBLIC_STELLAR_RPC_URL = "https://soroban-testnet.stellar.org"
+  NEXT_PUBLIC_STELLAR_HORIZON_URL = "https://horizon-testnet.stellar.org"
