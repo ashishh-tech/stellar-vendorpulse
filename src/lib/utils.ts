@@ -37,5 +37,9 @@ export function formatScore(score: number): { text: string; colorClass: string; 
 
 export function getExplorerUrl(hashOrAddress: string, type: 'tx' | 'account' | 'contract' = 'tx'): string {
   const baseUrl = process.env.NEXT_PUBLIC_STELLAR_EXPLORER_URL || 'https://stellar.expert/explorer/testnet';
+  // Mock hashes (0x-prefixed) won't exist on-chain — link to testnet operations page instead
+  if (hashOrAddress.startsWith('0x')) {
+    return `${baseUrl}/ops`;
+  }
   return `${baseUrl}/${type}/${hashOrAddress}`;
 }
