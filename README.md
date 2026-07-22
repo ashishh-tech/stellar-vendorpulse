@@ -10,6 +10,14 @@
 
 ---
 
+## 🎥 Project Video Demo & Links
+
+- 🎬 **YouTube Video Demo**: [YOUR_YOUTUBE_VIDEO_LINK_HERE](https://www.youtube.com/watch?v=YOUR_VIDEO_ID) *(Paste your 1-2 min YouTube video link here)*
+- 🌐 **Live Demo Web App**: [https://stellar-vendorpulse.vercel.app](https://stellar-vendorpulse.vercel.app)
+- 🐙 **GitHub Repository**: [https://github.com/ashishh-tech/stellar-vendorpulse](https://github.com/ashishh-tech/stellar-vendorpulse)
+
+---
+
 ## 📌 Executive Summary & Problem Statement
 
 In conventional procurement operations, vendor performance evaluation relies heavily on fragmented spreadsheets, unverified email threads, and subjective feedback. This leads to information asymmetry, delayed fault detection, and unquantifiable supplier risk.
@@ -266,6 +274,7 @@ To deploy both contracts to the official **Stellar Testnet**:
 | **Writing Tests for Contracts & Frontend** | ✅ PASS | **20 Rust contract tests** (`cargo test`) + **9 Vitest frontend tests** (`npm run test`) |
 | **Production Ready Architecture** | ✅ PASS | RBAC roles, state machine transitions, persistent storage separation, scale scores |
 | **Documentation & Diagrams** | ✅ PASS | Complete README with Mermaid flowcharts, sequence diagrams, and API specifications |
+| **Demo Video Link (1-2 minutes)** | 🎬 READY | See [Project Video Demo & Links](#-project-video-demo--links) section at top of README |
 | **10+ Meaningful Commits** | ✅ PASS | **12+ granular, descriptive commits** in git repository history |
 
 ---
