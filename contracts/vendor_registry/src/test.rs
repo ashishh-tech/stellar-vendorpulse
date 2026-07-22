@@ -25,7 +25,7 @@ fn setup_env() -> (Env, Address, VendorRegistryContractClient<'static>) {
 
 #[test]
 fn test_initialize_success() {
-    let (env, admin, client) = setup_env();
+    let (_env, admin, client) = setup_env();
     assert_eq!(client.get_admin(), admin);
     assert_eq!(client.version(), 1);
     assert_eq!(client.get_vendor_count(), 0);
@@ -34,8 +34,8 @@ fn test_initialize_success() {
 #[test]
 #[should_panic(expected = "Error(Contract, #2)")]
 fn test_initialize_twice_fails() {
-    let (env, admin, client) = setup_env();
-    let admin2 = Address::generate(&env);
+    let (_env, _admin, client) = setup_env();
+    let admin2 = Address::generate(&client.env);
     client.initialize(&admin2); // Should panic: AlreadyInitialized
 }
 
@@ -69,9 +69,9 @@ fn test_revoke_role() {
 #[test]
 #[should_panic(expected = "Error(Contract, #3)")]
 fn test_non_admin_cannot_grant_role() {
-    let (env, admin, client) = setup_env();
-    let non_admin = Address::generate(&env);
-    let target = Address::generate(&env);
+    let (_env, _admin, client) = setup_env();
+    let non_admin = Address::generate(&client.env);
+    let target = Address::generate(&client.env);
 
     client.grant_role(&non_admin, &target, &Role::Manager); // Should panic
 }
@@ -217,7 +217,7 @@ fn test_list_vendors_pagination() {
     let (env, admin, client) = setup_env();
 
     // Register 5 vendors
-    for i in 0..5u32 {
+    for _i in 0..5u32 {
         let mgr = Address::generate(&env);
         client.grant_role(&admin, &mgr, &Role::Manager);
 

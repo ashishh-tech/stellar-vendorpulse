@@ -17,7 +17,7 @@ jobs:
       - name: Install Rust Toolchain
         uses: dtolnay/rust-toolchain@stable
         with:
-          targets: wasm32v1-none
+          targets: wasm32-unknown-unknown
 
       - name: Cache Cargo Dependencies
         uses: actions/cache@v3
@@ -38,7 +38,7 @@ jobs:
       - name: Build Soroban WASM Binaries
         run: |
           cd contracts
-          cargo build --workspace --target wasm32v1-none --release
+          cargo build --workspace --target wasm32-unknown-unknown --release
 
   frontend-ci:
     name: Next.js Frontend (Lint, Typecheck & Vitest)

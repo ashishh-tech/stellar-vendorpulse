@@ -5,7 +5,7 @@ import {
   STELLAR_NETWORK_PASSPHRASE,
 } from '@/lib/stellar';
 import { Address, Contract, Operation, TransactionBuilder, xdr } from '@stellar/stellar-sdk';
-import { getPublicKey, signTransaction } from '@stellar/freighter-api';
+import { getAddress, signTransaction } from '@stellar/freighter-api';
 import { useTransactionStore } from '@/features/transactions/store';
 import { VendorDTO, ReviewDTO, RegisterVendorInput, SubmitReviewInput } from './types';
 import { logger } from '@/lib/logger';
@@ -129,7 +129,8 @@ export class SorobanContractService {
     });
 
     try {
-      const pubKey = await getPublicKey();
+      const res = await getAddress();
+      const pubKey = res?.address;
       if (!pubKey) throw new Error('Wallet public key unavailable');
 
       updateTransaction(txId, { status: 'processing' });
@@ -169,7 +170,8 @@ export class SorobanContractService {
     });
 
     try {
-      const pubKey = await getPublicKey();
+      const res = await getAddress();
+      const pubKey = res?.address;
       if (!pubKey) throw new Error('Wallet public key unavailable');
 
       updateTransaction(txId, { status: 'processing' });

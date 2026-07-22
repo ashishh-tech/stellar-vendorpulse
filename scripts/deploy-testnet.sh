@@ -33,7 +33,7 @@ echo ""
 # Step 3: Deploy VendorRegistry
 echo "▸ Step 3: Deploying VendorRegistry contract..."
 VENDOR_REGISTRY_ID=$(stellar contract deploy \
-  --wasm target/wasm32v1-none/release/vendor_registry.wasm \
+  --wasm target/wasm32-unknown-unknown/release/vendor_registry.wasm \
   --source "$DEPLOYER_ACCOUNT" \
   --network "$NETWORK" \
   --alias vendor_registry \
@@ -44,7 +44,7 @@ echo ""
 # Step 4: Deploy ReviewSystem
 echo "▸ Step 4: Deploying ReviewSystem contract..."
 REVIEW_SYSTEM_ID=$(stellar contract deploy \
-  --wasm target/wasm32v1-none/release/review_system.wasm \
+  --wasm target/wasm32-unknown-unknown/release/review_system.wasm \
   --source "$DEPLOYER_ACCOUNT" \
   --network "$NETWORK" \
   --alias review_system \

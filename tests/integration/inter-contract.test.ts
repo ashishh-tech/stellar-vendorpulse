@@ -1,5 +1,10 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { SorobanContractService } from '@/features/contracts/service';
+
+vi.mock('@stellar/freighter-api', () => ({
+  getAddress: vi.fn().mockResolvedValue({ address: 'GDQAAJ6RMTU3674NTTHOTLNTZGM6K546QO6J6O33C623CJA6Y7W6XXXX' }),
+  signTransaction: vi.fn().mockResolvedValue({ signedTxXdr: 'AAAA...' }),
+}));
 
 describe('Inter-Contract Communication Flow Integration Test', () => {
   it('fetches vendor list from contract service', async () => {
