@@ -7,6 +7,7 @@ import {
 import { Address, Contract, Operation, TransactionBuilder, xdr } from '@stellar/stellar-sdk';
 import { getAddress, signTransaction } from '@stellar/freighter-api';
 import { useTransactionStore } from '@/features/transactions/store';
+import { useEventStore } from '@/features/events/store';
 import { VendorDTO, ReviewDTO, RegisterVendorInput, SubmitReviewInput } from './types';
 import { logger } from '@/lib/logger';
 
@@ -209,6 +210,19 @@ export class SorobanContractService {
         hash: mockHash,
       });
 
+      useEventStore.getState().addEvents([
+        {
+          id: `evt_${Date.now()}`,
+          contractId: VENDOR_REGISTRY_CONTRACT_ID || 'CD5W2V6E3K7R5X7M9L2P4Q6R8S0T2U4V6W8X0Y2Z4A6B8C0D',
+          topic: ['vendor', 'register'],
+          data: `${input.name} Registered (${input.category})`,
+          ledger: 5289125,
+          ledgerClosedAt: new Date().toISOString(),
+          txHash: mockHash,
+          type: 'vendor_registered',
+        },
+      ]);
+
       logger.info('Registered vendor on Soroban', { input, mockHash });
       return mockHash;
     } catch (err: any) {
@@ -290,6 +304,29 @@ export class SorobanContractService {
         hash: mockHash,
       });
 
+      useEventStore.getState().addEvents([
+        {
+          id: `evt_${Date.now()}`,
+          contractId: REVIEW_SYSTEM_CONTRACT_ID || 'CB2M4N6P8Q0R2S4T6U8V0W2X4Y6Z8A0B2C4D6E8F0G2H4I6',
+          topic: ['review', 'submit'],
+          data: `Multi-Axis Score Review (${overallScore}/100)`,
+          ledger: 5289128,
+          ledgerClosedAt: new Date().toISOString(),
+          txHash: mockHash,
+          type: 'review_submitted',
+        },
+        {
+          id: `evt_${Date.now() + 1}`,
+          contractId: VENDOR_REGISTRY_CONTRACT_ID || 'CD5W2V6E3K7R5X7M9L2P4Q6R8S0T2U4V6W8X0Y2Z4A6B8C0D',
+          topic: ['vendor', 'scored'],
+          data: 'Inter-Contract Score Calculation Update',
+          ledger: 5289128,
+          ledgerClosedAt: new Date().toISOString(),
+          txHash: mockHash,
+          type: 'score_updated',
+        },
+      ]);
+
       logger.info('Submitted review on Soroban with inter-contract score trigger', { input, mockHash });
       return mockHash;
     } catch (err: any) {
@@ -337,6 +374,19 @@ export class SorobanContractService {
         status: 'confirmed',
         hash: mockHash,
       });
+
+      useEventStore.getState().addEvents([
+        {
+          id: `evt_${Date.now()}`,
+          contractId: VENDOR_REGISTRY_CONTRACT_ID || 'CD5W2V6E3K7R5X7M9L2P4Q6R8S0T2U4V6W8X0Y2Z4A6B8C0D',
+          topic: ['vendor', 'status'],
+          data: `Status Transition: ${status}`,
+          ledger: 5289130,
+          ledgerClosedAt: new Date().toISOString(),
+          txHash: mockHash,
+          type: 'status_changed',
+        },
+      ]);
 
       return mockHash;
     } catch (err: any) {
