@@ -13,7 +13,7 @@
 ## 🎥 Project Video Demo & Links
 
 - 🎬 **YouTube Video Demo**: [YOUR_YOUTUBE_VIDEO_LINK_HERE](https://www.youtube.com/watch?v=YOUR_VIDEO_ID) *(Paste your 1-2 min YouTube video link here)*
-- 🌐 **Live Demo Web App**: [https://stellar-vendorpulse.netlify.app](https://stellar-vendorpulse.netlify.app/)
+- 🌐 **Live Demo Web App**: [https://stellar-vendorpulse.netlify.app](https://stellar-vendorpulse.netlify.app)
 - 🐙 **GitHub Repository**: [https://github.com/ashishh-tech/stellar-vendorpulse](https://github.com/ashishh-tech/stellar-vendorpulse)
 
 ---
