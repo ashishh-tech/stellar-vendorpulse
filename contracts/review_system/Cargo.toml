@@ -1,0 +1,19 @@
+[package]
+name = "review_system"
+version = "1.0.0"
+edition = "2021"
+publish = false
+
+[lib]
+crate-type = ["cdylib"]
+doctest = false
+
+[dependencies]
+soroban-sdk = { version = "22.0.0" }
+
+[dev-dependencies]
+soroban-sdk = { version = "22.0.0", features = ["testutils"] }
+vendor_registry = { path = "../vendor_registry" }
+
+[features]
+testutils = ["soroban-sdk/testutils"]
