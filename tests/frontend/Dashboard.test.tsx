@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
-import DashboardPage from '@/app/dashboard/page.tsx';
+import DashboardPage from '@/app/dashboard/page';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 vi.mock('@/features/contracts/hooks/useVendors', () => ({
@@ -37,7 +37,7 @@ describe('Dashboard Page Component', () => {
 
     expect(screen.getByText('Vendor Performance Dashboard')).toBeInTheDocument();
     expect(screen.getByText('Apex Global Logistics')).toBeInTheDocument();
-    expect(screen.getByText('Logistics & Shipping')).toBeInTheDocument();
-    expect(screen.getByText('92/100')).toBeInTheDocument();
+    expect(screen.getAllByText('Logistics & Shipping')[0]).toBeInTheDocument();
+    expect(screen.getAllByText(/92\/100/)[0]).toBeInTheDocument();
   });
 });

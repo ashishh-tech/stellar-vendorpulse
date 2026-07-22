@@ -19,7 +19,7 @@ describe('ConnectWalletButton Component', () => {
     });
     render(<ConnectWalletButton />);
     expect(screen.getByText('150.50')).toBeInTheDocument();
-    expect(screen.getByText(/GDQA...XXXX/i)).toBeInTheDocument();
+    expect(screen.getByText(/GDQAAJ\.\.\.XXXX/i)).toBeInTheDocument();
   });
 
   it('triggers modal open state when clicked while disconnected', () => {

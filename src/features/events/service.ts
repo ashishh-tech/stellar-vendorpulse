@@ -34,7 +34,7 @@ export async function fetchContractEvents(startLedger?: number): Promise<Contrac
 
       return {
         id: evt.id,
-        contractId: evt.contractId,
+        contractId: evt.contractId ? String(evt.contractId) : '',
         topic: topics,
         data: evt.value,
         ledger: evt.ledger,

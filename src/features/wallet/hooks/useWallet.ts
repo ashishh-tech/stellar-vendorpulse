@@ -1,5 +1,5 @@
 import { useEffect, useCallback } from 'react';
-import { isConnected, isAllowed, setAllowed, getPublicKey, getNetwork } from '@stellar/freighter-api';
+import { isConnected, isAllowed, setAllowed, getAddress, getNetwork } from '@stellar/freighter-api';
 import { useWalletStore } from '../store';
 import { SupportedWallet } from '../types';
 import { fetchAccountBalance, STELLAR_NETWORK } from '@/lib/stellar';
@@ -21,25 +21,28 @@ export function useWallet() {
     store.setConnecting(true);
     store.setError(null);
     try {
-      const connected = await isConnected();
-      if (!connected) {
+      const connRes = await isConnected();
+      if (!connRes || !connRes.isConnected) {
         throw new Error('Freighter wallet extension is not installed or enabled in browser.');
       }
 
       await setAllowed();
-      const pubKey = await getPublicKey();
+      const addrRes = await getAddress();
+      const pubKey = addrRes?.address;
       if (!pubKey) {
-        throw new Error('Failed to retrieve public key from Freighter.');
+        throw new Error('Failed to retrieve address from Freighter.');
       }
 
-      const network = await getNetwork();
+      const netRes = await getNetwork();
+      const netName = netRes?.network || STELLAR_NETWORK;
+
       store.setAddress(pubKey);
       store.setWallet('freighter', 'Freighter');
-      store.setNetwork(network || STELLAR_NETWORK);
+      store.setNetwork(netName);
       store.setModalOpen(false);
 
       await updateBalance(pubKey);
-      logger.info('Connected to Freighter wallet', { address: pubKey, network });
+      logger.info('Connected to Freighter wallet', { address: pubKey, network: netName });
     } catch (err: any) {
       const msg = err.message || 'Failed to connect wallet';
       store.setError(msg);
@@ -65,12 +68,12 @@ export function useWallet() {
   const autoReconnect = useCallback(async () => {
     if (store.isConnected && store.walletId === 'freighter') {
       try {
-        const allowed = await isAllowed();
-        if (allowed) {
-          const pubKey = await getPublicKey();
-          if (pubKey) {
-            store.setAddress(pubKey);
-            await updateBalance(pubKey);
+        const allowedRes = await isAllowed();
+        if (allowedRes && allowedRes.isAllowed) {
+          const addrRes = await getAddress();
+          if (addrRes && addrRes.address) {
+            store.setAddress(addrRes.address);
+            await updateBalance(addrRes.address);
           }
         }
       } catch (err) {

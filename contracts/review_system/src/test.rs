@@ -20,14 +20,12 @@ fn setup_env() -> (
     env.mock_all_auths();
 
     // Deploy VendorRegistry
-    let registry_id = env.register(VendorRegistryContract, ());
-    let registry_client = VendorRegistryContractClient::new(&env, &registry_id);
-    let registry_addr = Address::from_contract_id(&env, &registry_id);
+    let registry_addr = env.register(VendorRegistryContract, ());
+    let registry_client = VendorRegistryContractClient::new(&env, &registry_addr);
 
     // Deploy ReviewSystem
-    let review_id = env.register(ReviewSystemContract, ());
-    let review_client = ReviewSystemContractClient::new(&env, &review_id);
-    let review_addr = Address::from_contract_id(&env, &review_id);
+    let review_addr = env.register(ReviewSystemContract, ());
+    let review_client = ReviewSystemContractClient::new(&env, &review_addr);
 
     let admin = Address::generate(&env);
 
@@ -47,7 +45,7 @@ fn setup_env() -> (
 
 #[test]
 fn test_initialize_success() {
-    let (env, admin, review_client, _, _) = setup_env();
+    let (_env, admin, review_client, _, _) = setup_env();
     assert_eq!(review_client.get_admin(), admin);
     assert_eq!(review_client.version(), 1);
     assert_eq!(review_client.get_review_count(), 0);
@@ -56,8 +54,8 @@ fn test_initialize_success() {
 #[test]
 #[should_panic(expected = "Error(Contract, #2)")]
 fn test_initialize_twice_fails() {
-    let (env, admin, review_client, _, registry_addr) = setup_env();
-    let admin2 = Address::generate(&env);
+    let (_env, _admin, review_client, _, registry_addr) = setup_env();
+    let admin2 = Address::generate(&review_client.env);
     review_client.initialize(&admin2, &registry_addr);
 }
 
