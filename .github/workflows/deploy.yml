@@ -22,9 +22,7 @@ jobs:
           targets: wasm32-unknown-unknown
 
       - name: Install Stellar CLI
-        uses: stellar/actions/setup-stellar-cli@v1
-        with:
-          version: 'latest'
+        uses: stellar/stellar-cli@main
 
       - name: Deploy & Link Contracts on Testnet
         run: |
