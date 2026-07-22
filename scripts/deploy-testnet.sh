@@ -26,7 +26,7 @@ echo ""
 # Step 2: Build contracts
 echo "▸ Step 2: Building smart contracts..."
 cd "$(dirname "$0")/../contracts"
-stellar contract build
+cargo build --workspace --target wasm32-unknown-unknown --release
 echo "  Build complete."
 echo ""
 
