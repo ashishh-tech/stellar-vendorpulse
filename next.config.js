@@ -1,11 +1,15 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  output: 'export',
   reactStrictMode: true,
   eslint: {
     ignoreDuringBuilds: true,
   },
   typescript: {
     ignoreBuildErrors: false,
+  },
+  images: {
+    unoptimized: true,
   },
   webpack: (config) => {
     config.resolve.fallback = {
@@ -19,9 +23,6 @@ const nextConfig = {
       url: false,
     };
     return config;
-  },
-  serverActions: {
-    bodySizeLimit: '2mb',
   },
 };
 
