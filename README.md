@@ -1,4 +1,4 @@
-# ⚡ VendorPulse - Stellar Orange Belt (Level 3) Application
+# ⚡ VendorPulse — The Trust Layer for B2B Supply Chains
 
 > **Decentralized Vendor Performance Management Platform built on Stellar Soroban Smart Contracts.**
 
