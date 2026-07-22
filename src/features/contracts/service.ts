@@ -10,8 +10,8 @@ import { useTransactionStore } from '@/features/transactions/store';
 import { VendorDTO, ReviewDTO, RegisterVendorInput, SubmitReviewInput } from './types';
 import { logger } from '@/lib/logger';
 
-// ─── Mock Fallback Data for Read Operations when network/contract is unconfigured ──────
-const MOCK_VENDORS: VendorDTO[] = [
+// ─── Initial Mock Data ──────────────────────────────────────────────────────────
+const INITIAL_VENDORS: VendorDTO[] = [
   {
     id: 1,
     owner: 'GDQAAJ6RMTU3674NTTHOTLNTZGM6K546QO6J6O33C623CJA6Y7W6XXXX',
@@ -62,7 +62,7 @@ const MOCK_VENDORS: VendorDTO[] = [
   },
 ];
 
-const MOCK_REVIEWS: ReviewDTO[] = [
+const INITIAL_REVIEWS: ReviewDTO[] = [
   {
     id: 1,
     vendor_id: 1,
@@ -89,32 +89,74 @@ const MOCK_REVIEWS: ReviewDTO[] = [
   },
 ];
 
+let inMemoryVendors: VendorDTO[] = [...INITIAL_VENDORS];
+let inMemoryReviews: ReviewDTO[] = [...INITIAL_REVIEWS];
+
+function getStoredVendors(): VendorDTO[] {
+  if (typeof window !== 'undefined' && window.localStorage) {
+    try {
+      const stored = localStorage.getItem('vendorpulse_vendors');
+      if (stored) {
+        return JSON.parse(stored);
+      }
+      localStorage.setItem('vendorpulse_vendors', JSON.stringify(INITIAL_VENDORS));
+    } catch (e) {
+      logger.error('Failed to load vendors from localStorage', e);
+    }
+  }
+  return inMemoryVendors;
+}
+
+function saveStoredVendors(vendors: VendorDTO[]) {
+  inMemoryVendors = vendors;
+  if (typeof window !== 'undefined' && window.localStorage) {
+    try {
+      localStorage.setItem('vendorpulse_vendors', JSON.stringify(vendors));
+    } catch (e) {
+      logger.error('Failed to save vendors to localStorage', e);
+    }
+  }
+}
+
+function getStoredReviews(): ReviewDTO[] {
+  if (typeof window !== 'undefined' && window.localStorage) {
+    try {
+      const stored = localStorage.getItem('vendorpulse_reviews');
+      if (stored) {
+        return JSON.parse(stored);
+      }
+      localStorage.setItem('vendorpulse_reviews', JSON.stringify(INITIAL_REVIEWS));
+    } catch (e) {
+      logger.error('Failed to load reviews from localStorage', e);
+    }
+  }
+  return inMemoryReviews;
+}
+
+function saveStoredReviews(reviews: ReviewDTO[]) {
+  inMemoryReviews = reviews;
+  if (typeof window !== 'undefined' && window.localStorage) {
+    try {
+      localStorage.setItem('vendorpulse_reviews', JSON.stringify(reviews));
+    } catch (e) {
+      logger.error('Failed to save reviews to localStorage', e);
+    }
+  }
+}
+
 export class SorobanContractService {
-  // ── Read operations with automatic live RPC attempt + graceful fallback ──
+  // ── Read operations ──
 
   static async listVendors(): Promise<VendorDTO[]> {
-    if (!VENDOR_REGISTRY_CONTRACT_ID) {
-      logger.warn('VendorRegistry contract ID not set, returning mock data.');
-      return MOCK_VENDORS;
-    }
-
-    try {
-      // In production, invoke read function or fetch ledger entry
-      return MOCK_VENDORS;
-    } catch (err) {
-      logger.error('Failed to query list_vendors from Soroban', err);
-      return MOCK_VENDORS;
-    }
+    return getStoredVendors();
   }
 
   static async getVendorReviews(vendorId: number): Promise<ReviewDTO[]> {
-    if (!REVIEW_SYSTEM_CONTRACT_ID) {
-      return MOCK_REVIEWS.filter((r) => r.vendor_id === vendorId);
-    }
-    return MOCK_REVIEWS.filter((r) => r.vendor_id === vendorId);
+    const reviews = getStoredReviews();
+    return reviews.filter((r) => r.vendor_id === vendorId);
   }
 
-  // ── Write operations with transaction lifecycle tracking ──
+  // ── Write operations ──
 
   static async registerVendor(input: RegisterVendorInput): Promise<string> {
     const txId = `tx_${Date.now()}`;
@@ -129,16 +171,38 @@ export class SorobanContractService {
     });
 
     try {
-      const res = await getAddress();
-      const pubKey = res?.address;
-      if (!pubKey) throw new Error('Wallet public key unavailable');
+      let pubKey = 'GDQAAJ6RMTU3674NTTHOTLNTZGM6K546QO6J6O33C623CJA6Y7W6XXXX';
+      try {
+        const res = await getAddress();
+        if (res?.address) pubKey = res.address;
+      } catch (e) {
+        // Fallback to default address if wallet not connected or mocked
+      }
 
       updateTransaction(txId, { status: 'processing' });
 
       // Simulate network interaction delay
-      await new Promise((resolve) => setTimeout(resolve, 2000));
+      await new Promise((resolve) => setTimeout(resolve, 1500));
 
       const mockHash = '0x' + Array.from({ length: 64 }, () => Math.floor(Math.random() * 16).toString(16)).join('');
+
+      // Dynamically store new vendor
+      const currentVendors = getStoredVendors();
+      const newVendor: VendorDTO = {
+        id: Date.now(),
+        owner: pubKey,
+        name: input.name,
+        category: input.category,
+        contact_email: input.contactEmail,
+        status: 'Active',
+        avg_score: 100,
+        review_count: 0,
+        created_at: Math.floor(Date.now() / 1000),
+        updated_at: Math.floor(Date.now() / 1000),
+      };
+
+      const updated = [newVendor, ...currentVendors];
+      saveStoredVendors(updated);
 
       updateTransaction(txId, {
         status: 'confirmed',
@@ -170,15 +234,56 @@ export class SorobanContractService {
     });
 
     try {
-      const res = await getAddress();
-      const pubKey = res?.address;
-      if (!pubKey) throw new Error('Wallet public key unavailable');
+      let pubKey = 'GAY4321...';
+      try {
+        const res = await getAddress();
+        if (res?.address) pubKey = res.address;
+      } catch (e) {
+        // Fallback
+      }
 
       updateTransaction(txId, { status: 'processing' });
 
-      await new Promise((resolve) => setTimeout(resolve, 2500));
+      await new Promise((resolve) => setTimeout(resolve, 1500));
 
       const mockHash = '0x' + Array.from({ length: 64 }, () => Math.floor(Math.random() * 16).toString(16)).join('');
+
+      const overallScore = Math.round(
+        (input.deliveryScore + input.qualityScore + input.paymentScore + input.communicationScore) / 4
+      );
+
+      // Add review
+      const currentReviews = getStoredReviews();
+      const newReview: ReviewDTO = {
+        id: Date.now(),
+        vendor_id: input.vendorId,
+        reviewer: pubKey,
+        delivery_score: input.deliveryScore,
+        quality_score: input.qualityScore,
+        payment_score: input.paymentScore,
+        communication_score: input.communicationScore,
+        overall_score: overallScore,
+        comment: input.comment,
+        created_at: Math.floor(Date.now() / 1000),
+      };
+      saveStoredReviews([newReview, ...currentReviews]);
+
+      // Update target vendor score
+      const currentVendors = getStoredVendors();
+      const updatedVendors = currentVendors.map((v) => {
+        if (v.id === input.vendorId) {
+          const newCount = v.review_count + 1;
+          const newAvg = Math.round((v.avg_score * v.review_count + overallScore) / newCount);
+          return {
+            ...v,
+            review_count: newCount,
+            avg_score: newAvg,
+            updated_at: Math.floor(Date.now() / 1000),
+          };
+        }
+        return v;
+      });
+      saveStoredVendors(updatedVendors);
 
       updateTransaction(txId, {
         status: 'confirmed',
@@ -211,9 +316,22 @@ export class SorobanContractService {
 
     try {
       updateTransaction(txId, { status: 'processing' });
-      await new Promise((resolve) => setTimeout(resolve, 1800));
+      await new Promise((resolve) => setTimeout(resolve, 1200));
 
       const mockHash = '0x' + Array.from({ length: 64 }, () => Math.floor(Math.random() * 16).toString(16)).join('');
+
+      const currentVendors = getStoredVendors();
+      const updatedVendors = currentVendors.map((v) => {
+        if (v.id === vendorId) {
+          return {
+            ...v,
+            status: status as VendorDTO['status'],
+            updated_at: Math.floor(Date.now() / 1000),
+          };
+        }
+        return v;
+      });
+      saveStoredVendors(updatedVendors);
 
       updateTransaction(txId, {
         status: 'confirmed',
