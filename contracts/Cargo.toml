@@ -1,8 +1,8 @@
 [workspace]
 resolver = "2"
 members = [
-    "contracts/vendor_registry",
-    "contracts/review_system",
+    "vendor_registry",
+    "review_system",
 ]
 
 [profile.release]
