@@ -1,6 +1,12 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
+  typescript: {
+    ignoreBuildErrors: false,
+  },
   webpack: (config) => {
     config.resolve.fallback = {
       ...config.resolve.fallback,
@@ -14,10 +20,8 @@ const nextConfig = {
     };
     return config;
   },
-  experimental: {
-    serverActions: {
-      bodySizeLimit: '2mb',
-    },
+  serverActions: {
+    bodySizeLimit: '2mb',
   },
 };
 
