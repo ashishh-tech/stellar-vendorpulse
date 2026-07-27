@@ -81,6 +81,7 @@ export function UserFeedbackSummary() {
   // Google Form & Excel Sheet URLs
   const GOOGLE_FORM_URL = 'https://forms.google.com/vendorpulse-feedback';
   const GOOGLE_SHEETS_EXCEL_URL = 'https://docs.google.com/spreadsheets/d/vendorpulse-feedback-responses/edit';
+  const PITCH_DECK_URL = '/VendorPulse_Pitch_Deck.pptx';
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -180,6 +181,15 @@ export function UserFeedbackSummary() {
               <Download className="w-3.5 h-3.5" />
               <span>Export Excel CSV</span>
             </button>
+
+            <a
+              href={PITCH_DECK_URL}
+              download="VendorPulse_Pitch_Deck.pptx"
+              className="px-3 py-1.5 bg-orange-950/80 hover:bg-orange-900/80 text-orange-300 border border-orange-800/80 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition"
+            >
+              <Download className="w-3.5 h-3.5" />
+              <span>Pitch Deck (PPTX)</span>
+            </a>
           </div>
         </div>
 
