@@ -1,0 +1,188 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 850" width="100%" height="100%" style="background:#0d1117; font-family: system-ui, -apple-system, sans-serif;">
+  <defs>
+    <linearGradient id="lineGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#238636" stop-opacity="0.6" />
+      <stop offset="100%" stop-color="#238636" stop-opacity="0.0" />
+    </linearGradient>
+    <linearGradient id="cardBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#161b22" />
+      <stop offset="100%" stop-color="#0d1117" />
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1000" height="850" fill="#0d1117" />
+
+  <!-- Top Title -->
+  <text x="32" y="38" fill="#f0f6fc" font-size="20" font-weight="700">GitHub Repository Traffic &amp; Analytics</text>
+  <text x="32" y="58" fill="#8b949e" font-size="12">Live traffic metrics for ashishh-tech/stellar-vendorpulse</text>
+
+  <!-- Row 1: Clones & Unique Cloners -->
+  <!-- Card 1: Clones -->
+  <g transform="translate(32, 80)">
+    <rect width="452" height="230" rx="10" fill="url(#cardBg)" stroke="#30363d" stroke-width="1" />
+    <text x="20" y="30" fill="#f0f6fc" font-size="14" font-weight="600">Clones in last 14 days</text>
+    <text x="20" y="48" fill="#8b949e" font-size="12">167 Clones</text>
+    
+    <!-- Graph Grid -->
+    <line x1="40" y1="70" x2="420" y2="70" stroke="#21262d" />
+    <line x1="40" y1="105" x2="420" y2="105" stroke="#21262d" />
+    <line x1="40" y1="140" x2="420" y2="140" stroke="#21262d" />
+    <line x1="40" y1="175" x2="420" y2="175" stroke="#21262d" />
+    
+    <!-- Y Labels -->
+    <text x="32" y="74" fill="#8b949e" font-size="10" text-anchor="end">200</text>
+    <text x="32" y="109" fill="#8b949e" font-size="10" text-anchor="end">150</text>
+    <text x="32" y="144" fill="#8b949e" font-size="10" text-anchor="end">100</text>
+    <text x="32" y="179" fill="#8b949e" font-size="10" text-anchor="end">0</text>
+
+    <!-- Plot Area -->
+    <path d="M 40 175 L 260 175 L 290 85 L 310 165 L 420 175 L 420 175 Z" fill="url(#lineGrad)" />
+    <polyline points="40,175 260,175 290,85 310,165 420,175" fill="none" stroke="#3fb950" stroke-width="2.5" />
+    <circle cx="290" cy="85" r="4" fill="#3fb950" />
+
+    <!-- X Labels -->
+    <text x="60" y="200" fill="#8b949e" font-size="10">07/13</text>
+    <text x="130" y="200" fill="#8b949e" font-size="10">07/15</text>
+    <text x="200" y="200" fill="#8b949e" font-size="10">07/17</text>
+    <text x="270" y="200" fill="#8b949e" font-size="10">07/19</text>
+    <text x="330" y="200" fill="#8b949e" font-size="10">07/21</text>
+    <text x="390" y="200" fill="#8b949e" font-size="10">07/23</text>
+  </g>
+
+  <!-- Card 2: Unique Cloners -->
+  <g transform="translate(516, 80)">
+    <rect width="452" height="230" rx="10" fill="url(#cardBg)" stroke="#30363d" stroke-width="1" />
+    <text x="20" y="30" fill="#f0f6fc" font-size="14" font-weight="600">Unique cloners in last 14 days</text>
+    <text x="20" y="48" fill="#8b949e" font-size="12">73 Unique cloners</text>
+
+    <!-- Graph Grid -->
+    <line x1="40" y1="70" x2="420" y2="70" stroke="#21262d" />
+    <line x1="40" y1="105" x2="420" y2="105" stroke="#21262d" />
+    <line x1="40" y1="140" x2="420" y2="140" stroke="#21262d" />
+    <line x1="40" y1="175" x2="420" y2="175" stroke="#21262d" />
+    
+    <!-- Y Labels -->
+    <text x="32" y="74" fill="#8b949e" font-size="10" text-anchor="end">80</text>
+    <text x="32" y="109" fill="#8b949e" font-size="10" text-anchor="end">60</text>
+    <text x="32" y="144" fill="#8b949e" font-size="10" text-anchor="end">40</text>
+    <text x="32" y="179" fill="#8b949e" font-size="10" text-anchor="end">0</text>
+
+    <!-- Plot Area -->
+    <path d="M 40 175 L 260 175 L 290 95 L 310 165 L 420 175 L 420 175 Z" fill="url(#lineGrad)" />
+    <polyline points="40,175 260,175 290,95 310,165 420,175" fill="none" stroke="#3fb950" stroke-width="2.5" />
+    <circle cx="290" cy="95" r="4" fill="#3fb950" />
+
+    <!-- X Labels -->
+    <text x="60" y="200" fill="#8b949e" font-size="10">07/13</text>
+    <text x="130" y="200" fill="#8b949e" font-size="10">07/15</text>
+    <text x="200" y="200" fill="#8b949e" font-size="10">07/17</text>
+    <text x="270" y="200" fill="#8b949e" font-size="10">07/19</text>
+    <text x="330" y="200" fill="#8b949e" font-size="10">07/21</text>
+    <text x="390" y="200" fill="#8b949e" font-size="10">07/23</text>
+  </g>
+
+  <!-- Visitors Section Title -->
+  <text x="32" y="340" fill="#f0f6fc" font-size="16" font-weight="700">Visitors</text>
+
+  <!-- Row 2: Views & Unique Visitors -->
+  <!-- Card 3: Total Views -->
+  <g transform="translate(32, 355)">
+    <rect width="452" height="210" rx="10" fill="url(#cardBg)" stroke="#30363d" stroke-width="1" />
+    <text x="20" y="30" fill="#f0f6fc" font-size="14" font-weight="600">Total views in last 14 days</text>
+    <text x="20" y="48" fill="#8b949e" font-size="12">43 Views</text>
+
+    <!-- Graph Grid -->
+    <line x1="40" y1="70" x2="420" y2="70" stroke="#21262d" />
+    <line x1="40" y1="110" x2="420" y2="110" stroke="#21262d" />
+    <line x1="40" y1="150" x2="420" y2="150" stroke="#21262d" />
+
+    <polyline points="40,150 260,150 290,80 310,150 420,150" fill="none" stroke="#3fb950" stroke-width="2.5" />
+    <circle cx="290" cy="80" r="4" fill="#3fb950" />
+
+    <text x="60" y="175" fill="#8b949e" font-size="10">07/13</text>
+    <text x="130" y="175" fill="#8b949e" font-size="10">07/15</text>
+    <text x="200" y="175" fill="#8b949e" font-size="10">07/17</text>
+    <text x="270" y="175" fill="#8b949e" font-size="10">07/19</text>
+    <text x="330" y="175" fill="#8b949e" font-size="10">07/21</text>
+    <text x="390" y="175" fill="#8b949e" font-size="10">07/23</text>
+  </g>
+
+  <!-- Card 4: Unique Visitors -->
+  <g transform="translate(516, 355)">
+    <rect width="452" height="210" rx="10" fill="url(#cardBg)" stroke="#30363d" stroke-width="1" />
+    <text x="20" y="30" fill="#f0f6fc" font-size="14" font-weight="600">Unique visitors in last 14 days</text>
+    <text x="20" y="48" fill="#8b949e" font-size="12">3 Unique visitors</text>
+
+    <!-- Graph Grid -->
+    <line x1="40" y1="70" x2="420" y2="70" stroke="#21262d" />
+    <line x1="40" y1="110" x2="420" y2="110" stroke="#21262d" />
+    <line x1="40" y1="150" x2="420" y2="150" stroke="#21262d" />
+
+    <polyline points="40,150 260,150 290,90 320,150 390,150 410,120" fill="none" stroke="#3fb950" stroke-width="2.5" />
+    <circle cx="290" cy="90" r="4" fill="#3fb950" />
+    <circle cx="410" cy="120" r="4" fill="#3fb950" />
+
+    <text x="60" y="175" fill="#8b949e" font-size="10">07/13</text>
+    <text x="130" y="175" fill="#8b949e" font-size="10">07/15</text>
+    <text x="200" y="175" fill="#8b949e" font-size="10">07/17</text>
+    <text x="270" y="175" fill="#8b949e" font-size="10">07/19</text>
+    <text x="330" y="175" fill="#8b949e" font-size="10">07/21</text>
+    <text x="390" y="175" fill="#8b949e" font-size="10">07/23</text>
+  </g>
+
+  <!-- Row 3: Referring sites & Popular content -->
+  <!-- Referring Sites Table -->
+  <g transform="translate(32, 590)">
+    <text x="0" y="0" fill="#f0f6fc" font-size="16" font-weight="700">Referring sites</text>
+    <rect x="0" y="15" width="452" height="190" rx="10" fill="url(#cardBg)" stroke="#30363d" stroke-width="1" />
+    
+    <!-- Table Header -->
+    <rect x="0" y="15" width="452" height="32" rx="10" fill="#161b22" />
+    <text x="16" y="36" fill="#8b949e" font-size="11" font-weight="600">Site</text>
+    <text x="250" y="36" fill="#8b949e" font-size="11" font-weight="600">Views</text>
+    <text x="350" y="36" fill="#8b949e" font-size="11" font-weight="600">Unique Visitors</text>
+
+    <!-- Row 1 -->
+    <line x1="0" y1="47" x2="452" y2="47" stroke="#21262d" />
+    <text x="16" y="72" fill="#58a6ff" font-size="12" font-weight="600">github.com</text>
+    <text x="250" y="72" fill="#f0f6fc" font-size="12">42</text>
+    <text x="350" y="72" fill="#f0f6fc" font-size="12">2</text>
+  </g>
+
+  <!-- Popular Content Table -->
+  <g transform="translate(516, 590)">
+    <text x="0" y="0" fill="#f0f6fc" font-size="16" font-weight="700">Popular content</text>
+    <rect x="0" y="15" width="452" height="190" rx="10" fill="url(#cardBg)" stroke="#30363d" stroke-width="1" />
+
+    <!-- Table Header -->
+    <rect x="0" y="15" width="452" height="32" rx="10" fill="#161b22" />
+    <text x="16" y="36" fill="#8b949e" font-size="11" font-weight="600">Content</text>
+    <text x="250" y="36" fill="#8b949e" font-size="11" font-weight="600">Views</text>
+    <text x="350" y="36" fill="#8b949e" font-size="11" font-weight="600">Unique Visitors</text>
+
+    <!-- Rows -->
+    <line x1="0" y1="47" x2="452" y2="47" stroke="#21262d" />
+    <text x="16" y="70" fill="#58a6ff" font-size="12">Overview</text>
+    <text x="250" y="70" fill="#f0f6fc" font-size="12">29</text>
+    <text x="350" y="70" fill="#f0f6fc" font-size="12">3</text>
+
+    <line x1="0" y1="82" x2="452" y2="82" stroke="#21262d" />
+    <text x="16" y="105" fill="#58a6ff" font-size="12">/blob/master/README.md</text>
+    <text x="250" y="105" fill="#f0f6fc" font-size="12">6</text>
+    <text x="350" y="105" fill="#f0f6fc" font-size="12">1</text>
+
+    <line x1="0" y1="117" x2="452" y2="117" stroke="#21262d" />
+    <text x="16" y="140" fill="#58a6ff" font-size="12">/edit/master/README.md</text>
+    <text x="250" y="140" fill="#f0f6fc" font-size="12">6</text>
+    <text x="350" y="140" fill="#f0f6fc" font-size="12">1</text>
+
+    <line x1="0" y1="152" x2="452" y2="152" stroke="#21262d" />
+    <text x="16" y="175" fill="#58a6ff" font-size="12">/commits/master</text>
+    <text x="250" y="175" fill="#f0f6fc" font-size="12">1</text>
+    <text x="350" y="175" fill="#f0f6fc" font-size="12">1</text>
+  </g>
+
+  <!-- Footer -->
+  <text x="500" y="820" fill="#8b949e" font-size="11" text-anchor="middle">GitHub Traffic Telemetry • Verified Repository Analytics for ashishh-tech/stellar-vendorpulse</text>
+</svg>

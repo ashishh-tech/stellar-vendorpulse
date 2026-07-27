@@ -1,7 +1,19 @@
 'use client';
 
 import React, { useState } from 'react';
-import { MessageSquare, Star, ThumbsUp, Send, CheckCircle2, TrendingUp, UserCheck, ShieldCheck } from 'lucide-react';
+import {
+  MessageSquare,
+  Star,
+  Send,
+  CheckCircle2,
+  TrendingUp,
+  UserCheck,
+  ShieldCheck,
+  FileSpreadsheet,
+  ExternalLink,
+  FormInput,
+  Download,
+} from 'lucide-react';
 
 interface FeedbackItem {
   id: string;
@@ -66,6 +78,10 @@ export function UserFeedbackSummary() {
   const [category, setCategory] = useState<FeedbackItem['category']>('UX / Interface');
   const [submitted, setSubmitted] = useState(false);
 
+  // Google Form & Excel Sheet URLs
+  const GOOGLE_FORM_URL = 'https://forms.google.com/vendorpulse-feedback';
+  const GOOGLE_SHEETS_EXCEL_URL = 'https://docs.google.com/spreadsheets/d/vendorpulse-feedback-responses/edit';
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!author.trim() || !comment.trim()) return;
@@ -91,6 +107,19 @@ export function UserFeedbackSummary() {
 
   const avgRating = (feedbackList.reduce((acc, f) => acc + f.rating, 0) / feedbackList.length).toFixed(1);
 
+  const exportExcelCSV = () => {
+    const headers = 'ID,Author,Role,Rating,Date,Category,Status,Comment\n';
+    const rows = feedbackList
+      .map((f) => `"${f.id}","${f.author}","${f.role}",${f.rating},"${f.date}","${f.category}","${f.status}","${f.comment.replace(/"/g, '""')}"`)
+      .join('\n');
+    const blob = new Blob([headers + rows], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'vendorpulse_user_feedback_summary.csv';
+    a.click();
+  };
+
   return (
     <div className="space-y-6">
       {/* Header & Metrics */}
@@ -105,7 +134,7 @@ export function UserFeedbackSummary() {
               <p className="text-xs text-slate-400">Verified feedback from procurement leads, auditors, and platform evaluators</p>
             </div>
           </div>
-          
+
           <div className="flex items-center gap-3 bg-slate-950 p-2.5 rounded-xl border border-slate-800">
             <div className="flex items-center gap-1 text-amber-400 font-bold text-lg">
               <Star className="w-5 h-5 fill-amber-400 text-amber-400" />
@@ -117,6 +146,40 @@ export function UserFeedbackSummary() {
               <span className="text-emerald-400 font-semibold block">98% Positive</span>
               <span className="text-slate-500">CSAT Metric</span>
             </div>
+          </div>
+        </div>
+
+        {/* External Google Form & Excel Sheet Action Banner */}
+        <div className="p-4 bg-slate-950 rounded-xl border border-indigo-900/60 flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div className="flex items-center gap-3">
+            <div className="p-2 bg-indigo-500/10 rounded-lg text-indigo-400">
+              <FileSpreadsheet className="w-5 h-5" />
+            </div>
+            <div>
+              <span className="text-white font-semibold text-xs block">Google Form &amp; Excel Live Feedback Sheet Integration</span>
+              <span className="text-slate-400 text-[11px] block">Submit reviews via Google Form or view response telemetry on Google Sheets / Excel</span>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <a
+              href={GOOGLE_FORM_URL}
+              target="_blank"
+              rel="noreferrer"
+              className="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg text-xs font-semibold flex items-center gap-1.5 transition"
+            >
+              <FormInput className="w-3.5 h-3.5" />
+              <span>Open Google Form</span>
+              <ExternalLink className="w-3 h-3 ml-0.5 opacity-70" />
+            </a>
+
+            <button
+              onClick={exportExcelCSV}
+              className="px-3 py-1.5 bg-emerald-950/80 hover:bg-emerald-900/80 text-emerald-300 border border-emerald-800/80 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition"
+            >
+              <Download className="w-3.5 h-3.5" />
+              <span>Export Excel CSV</span>
+            </button>
           </div>
         </div>
 
@@ -150,7 +213,7 @@ export function UserFeedbackSummary() {
 
       {/* Feedback Form */}
       <div className="glass-card rounded-2xl p-6 border border-slate-800 space-y-4">
-        <h3 className="text-sm font-bold text-white uppercase tracking-wider">Submit Platform Feedback</h3>
+        <h3 className="text-sm font-bold text-white uppercase tracking-wider">Submit Direct Platform Feedback</h3>
 
         {submitted && (
           <div className="p-3 bg-emerald-950/60 border border-emerald-800 text-emerald-300 rounded-xl text-xs flex items-center gap-2">
@@ -233,7 +296,7 @@ export function UserFeedbackSummary() {
           <div className="md:col-span-2 flex justify-end">
             <button
               type="submit"
-              className="px-5 py-2.5 bg-gradient-to-r from-indigo-500 to-orange-500 text-white font-semibold text-xs rx-xl rounded-xl hover:opacity-90 transition flex items-center gap-2 shadow-lg"
+              className="px-5 py-2.5 bg-gradient-to-r from-indigo-500 to-orange-500 text-white font-semibold text-xs rounded-xl hover:opacity-90 transition flex items-center gap-2 shadow-lg"
             >
               <Send className="w-3.5 h-3.5" />
               <span>Submit Feedback</span>
@@ -245,7 +308,7 @@ export function UserFeedbackSummary() {
       {/* Verified Feedback List */}
       <div className="space-y-3">
         <h3 className="text-sm font-bold text-white uppercase tracking-wider px-1">Community &amp; User Testimonials</h3>
-        
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {feedbackList.map((item) => (
             <div key={item.id} className="glass-card rounded-2xl p-5 border border-slate-800 space-y-3 flex flex-col justify-between">
