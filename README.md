@@ -440,6 +440,45 @@ Below are planned architectural improvements mapped to existing milestone commit
 
 ---
 
+## 🚀 Stellar Startup Track Application Package
+
+VendorPulse is applying to the **Stellar Startup Track** — an advanced founder-focused track for high-potential builders solving real-world problems on Stellar.
+
+### Focus Area Alignment
+
+| Stellar Focus Area | VendorPulse Alignment |
+| :--- | :--- |
+| **Identity & Compliance** | Immutable on-chain vendor reputation, RBAC access control, SLA audit history |
+| **Consumer dApps** | Enterprise procurement dashboard with real-time Soroban event telemetry |
+| **Payments & Cross-border Transfers** | Roadmap: USDC vendor invoice settlement via SEP-24/31 anchors |
+| **Developer Tooling** | Open-source inter-contract communication patterns for Soroban ecosystem |
+
+### Startup Package Documents
+
+| Document | Description | Link |
+| :--- | :--- | :--- |
+| **Executive Summary** | Problem, solution, market sizing (TAM/SAM/SOM), business model, competitive analysis, team, and funding ask | [`docs/STARTUP_EXECUTIVE_SUMMARY.md`](docs/STARTUP_EXECUTIVE_SUMMARY.md) |
+| **Milestone Roadmap** | 5-phase milestone plan with git commit links, deliverables, success metrics, budget, and risk analysis | [`docs/MILESTONE_ROADMAP.md`](docs/MILESTONE_ROADMAP.md) |
+| **Pitch Deck** | Complete startup presentation (Problem → Solution → Market → Tech → Business Model → Roadmap) | [`VendorPulse_Pitch_Deck.pptx`](VendorPulse_Pitch_Deck.pptx) |
+| **User Onboarding Data** | 53 verified user records with wallet addresses, ratings, and feedback | [`docs/VendorPulse_User_Feedback_Onboarding_Responses.csv`](docs/VendorPulse_User_Feedback_Onboarding_Responses.csv) |
+| **Contributing Guidelines** | Community contribution guide, setup instructions, code standards | [`CONTRIBUTING.md`](CONTRIBUTING.md) |
+
+### Milestone Completion Status
+
+| Milestone | Description | Status |
+| :-: | :--- | :-: |
+| **M1** | MVP — Soroban smart contracts + Next.js frontend | ✅ Complete |
+| **M2** | Testnet Launch — CI/CD, testing, live demo deployment | ✅ Complete |
+| **M3** | User Validation — 53 onboarded users, 4.8/5.0 CSAT rating | ✅ Complete |
+| **M4** | Mainnet — Security audit, mainnet deployment, SEP integration | 🔜 Planned (Q3–Q4 2026) |
+| **M5** | Growth — 5 enterprise pilots, multi-sig, AI anomaly detection | 🔜 Planned (Q4 2026–Q1 2027) |
+
+### Funding Request
+
+**$25,000–$50,000** to fund Mainnet deployment, third-party security audit, enterprise pilot customer acquisition, and advanced Stellar feature integration (SEP anchors, multi-sig governance, account abstraction).
+
+---
+
 ## 📄 License
 
 Distributed under the MIT License. See `LICENSE` for more information.
