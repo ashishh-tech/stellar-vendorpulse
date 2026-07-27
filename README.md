@@ -1,4 +1,4 @@
-# ⚡ VendorPulse - Stellar Orange Belt (Level 3) Application
+# ⚡ VendorPulse — The Trust Layer for B2B Supply Chains
 
 > **Decentralized Vendor Performance Management Platform built on Stellar Soroban Smart Contracts.**
 
@@ -12,7 +12,7 @@
 
 ## 🎥 Project Video Demo & Key Links
 
-- 🎬 **YouTube Video Demo**: [https://www.youtube.com/watch?v=YOUR_VIDEO_ID](https://www.youtube.com/watch?v=YOUR_VIDEO_ID) *(1-2 minute presentation walkthrough)*
+- 🎬 **YouTube Video Demo**: [https://youtu.be/Gt3mxxhFspU](https://youtu.be/Gt3mxxhFspU) *(1-2 minute presentation walkthrough)*
 - 🌐 **Live Demo Web App**: [https://stellar-vendorpulse.netlify.app](https://stellar-vendorpulse.netlify.app)
 - 🐙 **GitHub Repository**: [https://github.com/ashishh-tech/stellar-vendorpulse](https://github.com/ashishh-tech/stellar-vendorpulse)
 
