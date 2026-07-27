@@ -1,0 +1,122 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" width="100%" height="100%" style="background:#020617; font-family: system-ui, -apple-system, sans-serif;">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f172a" />
+      <stop offset="100%" stop-color="#020617" />
+    </linearGradient>
+    <linearGradient id="cardGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b" stop-opacity="0.9" />
+      <stop offset="100%" stop-color="#0f172a" stop-opacity="0.95" />
+    </linearGradient>
+    <linearGradient id="primaryGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#6366f1" />
+      <stop offset="100%" stop-color="#ea580c" />
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="16" stdDeviation="24" flood-color="#000000" flood-opacity="0.6" />
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="675" fill="url(#bgGrad)" />
+  <text x="600" y="44" fill="#94a3b8" font-size="16" font-weight="700" text-anchor="middle">Mobile Responsive Architecture &amp; Touch-Optimized UI</text>
+
+  <!-- Center Mobile Phone Mockup 1 (Dashboard View) -->
+  <g transform="translate(250, 70)" filter="url(#shadow)">
+    <!-- Device Frame -->
+    <rect x="0" y="0" width="310" height="560" rx="36" fill="#090d16" stroke="#334155" stroke-width="4" />
+    <!-- Notch -->
+    <rect x="100" y="10" width="110" height="18" rx="9" fill="#000000" />
+    <!-- Screen View -->
+    <rect x="12" y="36" width="286" height="510" rx="24" fill="#020617" />
+    
+    <!-- Mobile Header -->
+    <rect x="12" y="36" width="286" height="52" fill="#0f172a" />
+    <rect x="24" y="52" width="20" height="20" rx="4" fill="url(#primaryGrad)" />
+    <text x="52" y="66" fill="#ffffff" font-size="14" font-weight="700">VendorPulse</text>
+    <!-- Mobile Hamburger Menu Button -->
+    <rect x="254" y="48" width="28" height="28" rx="6" fill="#1e293b" />
+    <line x1="262" y1="56" x2="274" y2="56" stroke="#e2e8f0" stroke-width="2" stroke-linecap="round" />
+    <line x1="262" y1="62" x2="274" y2="62" stroke="#e2e8f0" stroke-width="2" stroke-linecap="round" />
+    <line x1="262" y1="68" x2="274" y2="68" stroke="#e2e8f0" stroke-width="2" stroke-linecap="round" />
+
+    <!-- Mobile Wallet Chip -->
+    <rect x="24" y="98" width="262" height="36" rx="18" fill="#1e293b" stroke="#334155" stroke-width="1" />
+    <circle cx="44" cy="116" r="4" fill="#10b981" />
+    <text x="56" y="120" fill="#e2e8f0" font-size="11" font-family="monospace">GBC5...7K8P (1,450 XLM)</text>
+
+    <!-- Mobile Stack Cards -->
+    <rect x="24" y="146" width="262" height="84" rx="14" fill="url(#cardGrad)" stroke="#334155" stroke-width="1" />
+    <text x="40" y="170" fill="#94a3b8" font-size="11">Total Registered Vendors</text>
+    <text x="40" y="206" fill="#ffffff" font-size="24" font-weight="800">28</text>
+    <rect x="200" y="162" width="48" height="20" rx="10" fill="#065f46" />
+    <text x="224" y="176" fill="#34d399" font-size="10" font-weight="700" text-anchor="middle">+14%</text>
+
+    <rect x="24" y="240" width="262" height="84" rx="14" fill="url(#cardGrad)" stroke="#334155" stroke-width="1" />
+    <text x="40" y="264" fill="#94a3b8" font-size="11">Average Score</text>
+    <text x="40" y="300" fill="#38bdf8" font-size="24" font-weight="800">91.4 / 100</text>
+    <rect x="200" y="256" width="48" height="20" rx="10" fill="#075985" />
+    <text x="224" y="270" fill="#38bdf8" font-size="10" font-weight="700" text-anchor="middle">Optimal</text>
+
+    <!-- Mobile Card Item -->
+    <rect x="24" y="334" width="262" height="190" rx="14" fill="url(#cardGrad)" stroke="#334155" stroke-width="1" />
+    <text x="40" y="360" fill="#ffffff" font-size="14" font-weight="700">Acme Cloud Solutions</text>
+    <text x="40" y="378" fill="#94a3b8" font-size="11">Cloud Infrastructure</text>
+    <rect x="40" y="394" width="60" height="18" rx="9" fill="#065f46" />
+    <text x="70" y="407" fill="#34d399" font-size="9" font-weight="700" text-anchor="middle">ACTIVE</text>
+    
+    <text x="40" y="440" fill="#64748b" font-size="11">Score: <tspan fill="#38bdf8" font-weight="700">94.2</tspan> • Reviews: <tspan fill="#ffffff">24</tspan></text>
+    
+    <rect x="40" y="460" width="230" height="34" rx="8" fill="url(#primaryGrad)" />
+    <text x="155" y="481" fill="#ffffff" font-size="12" font-weight="700" text-anchor="middle">Submit Review on Soroban</text>
+  </g>
+
+  <!-- Right Mobile Phone Mockup 2 (Navigation Drawer & Evaluation Modal) -->
+  <g transform="translate(640, 70)" filter="url(#shadow)">
+    <!-- Device Frame -->
+    <rect x="0" y="0" width="310" height="560" rx="36" fill="#090d16" stroke="#334155" stroke-width="4" />
+    <!-- Notch -->
+    <rect x="100" y="10" width="110" height="18" rx="9" fill="#000000" />
+    <!-- Screen View -->
+    <rect x="12" y="36" width="286" height="510" rx="24" fill="#020617" />
+
+    <!-- Overlay Drawer Backdrop -->
+    <rect x="12" y="36" width="286" height="510" rx="24" fill="#000000" opacity="0.65" />
+    
+    <!-- Mobile Slide-out Drawer Panel -->
+    <rect x="12" y="36" width="230" height="510" rx="24" fill="#0f172a" stroke="#334155" stroke-width="1" />
+    <rect x="32" y="60" width="24" height="24" rx="6" fill="url(#primaryGrad)" />
+    <text x="64" y="77" fill="#ffffff" font-size="14" font-weight="700">VendorPulse</text>
+
+    <!-- Nav Items inside Drawer -->
+    <rect x="24" y="110" width="206" height="38" rx="10" fill="#6366f1" opacity="0.2" />
+    <text x="44" y="134" fill="#6366f1" font-size="13" font-weight="700">📊 Procurement Dashboard</text>
+    
+    <text x="44" y="180" fill="#cbd5e1" font-size="13" font-weight="500">📈 Analytics &amp; Radar</text>
+    <text x="44" y="224" fill="#cbd5e1" font-size="13" font-weight="500">⚡ Live Activity Feed</text>
+    <text x="44" y="268" fill="#cbd5e1" font-size="13" font-weight="500">⚙️ System Settings</text>
+    <text x="44" y="312" fill="#cbd5e1" font-size="13" font-weight="500">💬 User Feedback</text>
+
+    <!-- Soroban Status Badge -->
+    <rect x="24" y="470" width="206" height="44" rx="12" fill="#1e293b" />
+    <circle cx="44" cy="492" r="4" fill="#10b981" />
+    <text x="56" y="490" fill="#ffffff" font-size="11" font-weight="600">Stellar Testnet RPC</text>
+    <text x="56" y="504" fill="#64748b" font-size="10">Soroban SDK v22.0</text>
+  </g>
+
+  <!-- Side Technical Highlights -->
+  <rect x="40" y="180" width="180" height="120" rx="12" fill="url(#cardGrad)" stroke="#334155" stroke-width="1" />
+  <text x="56" y="208" fill="#6366f1" font-size="12" font-weight="700">Breakpoints</text>
+  <text x="56" y="230" fill="#ffffff" font-size="12">Tailwind sm / md / lg</text>
+  <text x="56" y="250" fill="#94a3b8" font-size="11">Adaptive Grid Layout</text>
+  <text x="56" y="270" fill="#94a3b8" font-size="11">Touch Targets &gt; 44px</text>
+
+  <rect x="980" y="180" width="180" height="120" rx="12" fill="url(#cardGrad)" stroke="#334155" stroke-width="1" />
+  <text x="996" y="208" fill="#ea580c" font-size="12" font-weight="700">Mobile Wallet</text>
+  <text x="996" y="230" fill="#ffffff" font-size="12">Freighter App Browser</text>
+  <text x="996" y="250" fill="#94a3b8" font-size="11">WalletConnect Support</text>
+  <text x="996" y="270" fill="#94a3b8" font-size="11">Native Modal Sheet</text>
+
+  <!-- Footer -->
+  <text x="600" y="650" fill="#475569" font-size="11" text-anchor="middle">Responsive Design Verification • Tested across iOS Safari &amp; Android Chrome Mobile</text>
+</svg>

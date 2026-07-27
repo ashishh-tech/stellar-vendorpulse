@@ -1,0 +1,129 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" width="100%" height="100%" style="background:#020617; font-family: system-ui, -apple-system, sans-serif;">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f172a" />
+      <stop offset="100%" stop-color="#020617" />
+    </linearGradient>
+    <linearGradient id="cardGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b" stop-opacity="0.8" />
+      <stop offset="100%" stop-color="#0f172a" stop-opacity="0.9" />
+    </linearGradient>
+    <linearGradient id="radarFill" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#6366f1" stop-opacity="0.5" />
+      <stop offset="100%" stop-color="#ea580c" stop-opacity="0.3" />
+    </linearGradient>
+    <linearGradient id="primaryGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#6366f1" />
+      <stop offset="100%" stop-color="#ea580c" />
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="675" fill="url(#bgGrad)" />
+
+  <!-- Navigation Bar -->
+  <rect x="0" y="0" width="1200" height="64" fill="#0f172a" opacity="0.9" />
+  <line x1="0" y1="64" x2="1200" y2="64" stroke="#334155" stroke-width="1" />
+  
+  <rect x="32" y="16" width="32" height="32" rx="8" fill="url(#primaryGrad)" />
+  <path d="M48 22 L40 38 L46 38 L44 44 L52 28 L46 28 Z" fill="#ffffff" />
+  <text x="76" y="38" fill="#ffffff" font-size="20" font-weight="700">VendorPulse Analytics</text>
+  <rect x="270" y="24" width="130" height="20" rx="10" fill="#065f46" />
+  <text x="335" y="38" fill="#34d399" font-size="11" font-weight="600" text-anchor="middle">LIVE TELEMETRY STREAM</text>
+
+  <!-- Left Side: Multi-Axis Radar Chart Card -->
+  <rect x="48" y="88" width="540" height="540" rx="16" fill="url(#cardGrad)" stroke="#334155" stroke-width="1" />
+  <text x="76" y="124" fill="#ffffff" font-size="18" font-weight="700">Multi-Axis Score Radar Evaluation</text>
+  <text x="76" y="144" fill="#94a3b8" font-size="12">Soroban contract aggregated score telemetry per category axis</text>
+
+  <!-- Radar Web Diagram (Center at 318, 360) -->
+  <!-- Concentric Polygons -->
+  <polygon points="318,220 440,310 440,430 318,520 196,430 196,310" fill="none" stroke="#334155" stroke-width="1.5" stroke-dasharray="4,4" />
+  <polygon points="318,255 405,325 405,415 318,485 231,415 231,325" fill="none" stroke="#334155" stroke-width="1.5" stroke-dasharray="4,4" />
+  <polygon points="318,290 370,340 370,400 318,450 266,400 266,340" fill="none" stroke="#334155" stroke-width="1.5" stroke-dasharray="4,4" />
+  
+  <!-- Axis Lines -->
+  <line x1="318" y1="360" x2="318" y2="200" stroke="#475569" stroke-width="1.5" />
+  <line x1="318" y1="360" x2="456" y2="300" stroke="#475569" stroke-width="1.5" />
+  <line x1="318" y1="360" x2="456" y2="450" stroke="#475569" stroke-width="1.5" />
+  <line x1="318" y1="360" x2="318" y2="530" stroke="#475569" stroke-width="1.5" />
+  <line x1="318" y1="360" x2="180" y2="450" stroke="#475569" stroke-width="1.5" />
+  <line x1="318" y1="360" x2="180" y2="300" stroke="#475569" stroke-width="1.5" />
+
+  <!-- Data Polygon (Live Score Plot: Timeliness 92, Quality 96, Payment 88, Comm 94) -->
+  <polygon points="318,212 445,308 432,440 318,505 198,438 190,305" fill="url(#radarFill)" stroke="#6366f1" stroke-width="3" />
+  
+  <!-- Data Points -->
+  <circle cx="318" cy="212" r="5" fill="#6366f1" />
+  <circle cx="445" cy="308" r="5" fill="#6366f1" />
+  <circle cx="432" cy="440" r="5" fill="#ea580c" />
+  <circle cx="318" cy="505" r="5" fill="#ea580c" />
+  <circle cx="198" cy="438" r="5" fill="#10b981" />
+  <circle cx="190" cy="305" r="5" fill="#10b981" />
+
+  <!-- Axis Labels -->
+  <text x="318" y="190" fill="#f8fafc" font-size="12" font-weight="700" text-anchor="middle">Delivery Timeliness (94.0)</text>
+  <text x="470" y="298" fill="#f8fafc" font-size="12" font-weight="700">Product Quality (96.5)</text>
+  <text x="470" y="460" fill="#f8fafc" font-size="12" font-weight="700">Payment Terms (88.0)</text>
+  <text x="318" y="550" fill="#f8fafc" font-size="12" font-weight="700" text-anchor="middle">SLA Compliance (91.2)</text>
+  <text x="50" y="460" fill="#f8fafc" font-size="12" font-weight="700">Communication (92.8)</text>
+  <text x="60" y="298" fill="#f8fafc" font-size="12" font-weight="700">Support Speed (95.0)</text>
+
+  <!-- Right Side: Soroban Event Stream Monitoring Setup -->
+  <rect x="612" y="88" width="540" height="540" rx="16" fill="url(#cardGrad)" stroke="#334155" stroke-width="1" />
+  <text x="640" y="124" fill="#ffffff" font-size="18" font-weight="700">Live Soroban Event Stream Monitor</text>
+  <text x="640" y="144" fill="#94a3b8" font-size="12">RPC getEvents polling • Sub-second telemetry ingestion</text>
+
+  <!-- Console Log Terminal Mockup -->
+  <rect x="636" y="168" width="492" height="436" rx="12" fill="#020617" stroke="#1e293b" stroke-width="1" />
+  <!-- Terminal Top Bar -->
+  <rect x="636" y="168" width="492" height="32" rx="12" fill="#0f172a" />
+  <circle cx="654" cy="184" r="5" fill="#ef4444" />
+  <circle cx="670" cy="184" r="5" fill="#eab308" />
+  <circle cx="686" cy="184" r="5" fill="#22c55e" />
+  <text x="882" y="188" fill="#64748b" font-size="11" font-family="monospace" text-anchor="middle">soroban-rpc-event-stream.log</text>
+
+  <!-- Terminal Log Entries -->
+  <g font-family="monospace" font-size="11">
+    <!-- Log 1 -->
+    <text x="652" y="222" fill="#10b981">[18:51:02.120]</text>
+    <text x="752" y="222" fill="#38bdf8">[EVENT_STREAM]</text>
+    <text x="860" y="222" fill="#f8fafc">Connected to Soroban RPC Testnet</text>
+
+    <!-- Log 2 -->
+    <text x="652" y="250" fill="#10b981">[18:51:04.450]</text>
+    <text x="752" y="250" fill="#a5b4fc">[CONTRACT_CALL]</text>
+    <text x="860" y="250" fill="#f8fafc">VendorRegistry.register_vendor()</text>
+    <text x="668" y="268" fill="#64748b">└─ VendorId: #028 | Name: "Apex Logistics"</text>
+
+    <!-- Log 3 -->
+    <text x="652" y="298" fill="#10b981">[18:51:12.890]</text>
+    <text x="752" y="298" fill="#f97316">[INTER_CONTRACT]</text>
+    <text x="860" y="298" fill="#f8fafc">ReviewSystem -&gt; VendorRegistry</text>
+    <text x="668" y="316" fill="#64748b">└─ invoke update_vendor_score(id: 1, avg: 94)</text>
+
+    <!-- Log 4 -->
+    <text x="652" y="346" fill="#10b981">[18:51:15.010]</text>
+    <text x="752" y="346" fill="#a5b4fc">[REVIEW_SUBMITTED]</text>
+    <text x="860" y="346" fill="#f8fafc">ScoreAggregate recalculated</text>
+    <text x="668" y="364" fill="#64748b">└─ TxHash: 0xd7e53888d2e2b23a5e9515df...</text>
+
+    <!-- Log 5 -->
+    <text x="652" y="394" fill="#10b981">[18:51:22.640]</text>
+    <text x="752" y="394" fill="#eab308">[STATE_TRANSITION]</text>
+    <text x="860" y="394" fill="#f8fafc">Vendor #003 Active -&gt; Probation</text>
+    <text x="668" y="412" fill="#64748b">└─ Triggered by automated policy threshold</text>
+
+    <!-- Log 6 -->
+    <text x="652" y="442" fill="#10b981">[18:51:30.900]</text>
+    <text x="752" y="442" fill="#38bdf8">[EVENT_STREAM]</text>
+    <text x="860" y="442" fill="#f8fafc">getEvents ledger range [481920..481945]</text>
+
+    <!-- Active Blinking Prompt -->
+    <text x="652" y="480" fill="#38bdf8">root@vendorpulse-soroban:~#</text>
+    <rect x="850" y="468" width="8" height="14" fill="#38bdf8" />
+  </g>
+
+  <!-- Footer -->
+  <text x="600" y="650" fill="#475569" font-size="11" text-anchor="middle">Stellar Soroban Real-Time Telemetry &amp; Analytics Architecture Setup</text>
+</svg>
