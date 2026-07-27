@@ -1,0 +1,142 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" width="100%" height="100%" style="background:#020617; font-family: system-ui, -apple-system, sans-serif;">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f172a" />
+      <stop offset="100%" stop-color="#020617" />
+    </linearGradient>
+    <linearGradient id="cardGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b" stop-opacity="0.8" />
+      <stop offset="100%" stop-color="#0f172a" stop-opacity="0.9" />
+    </linearGradient>
+    <linearGradient id="primaryGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#6366f1" />
+      <stop offset="100%" stop-color="#ea580c" />
+    </linearGradient>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="12" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="675" fill="url(#bgGrad)" />
+  <circle cx="200" cy="150" r="250" fill="#6366f1" opacity="0.08" filter="url(#glow)" />
+  <circle cx="1000" cy="500" r="300" fill="#ea580c" opacity="0.06" filter="url(#glow)" />
+
+  <!-- Top Navigation Bar -->
+  <rect x="0" y="0" width="1200" height="64" fill="#0f172a" opacity="0.9" />
+  <line x1="0" y1="64" x2="1200" y2="64" stroke="#334155" stroke-width="1" />
+  
+  <!-- Logo & Title -->
+  <rect x="32" y="16" width="32" height="32" rx="8" fill="url(#primaryGrad)" />
+  <path d="M48 22 L40 38 L46 38 L44 44 L52 28 L46 28 Z" fill="#ffffff" />
+  <text x="76" y="38" fill="#ffffff" font-size="20" font-weight="700" letter-spacing="-0.5">VendorPulse</text>
+  <rect x="190" y="24" width="90" height="20" rx="10" fill="#312e81" />
+  <text x="235" y="38" fill="#a5b4fc" font-size="11" font-weight="600" text-anchor="middle">TESTNET</text>
+
+  <!-- Nav Links -->
+  <text x="350" y="38" fill="#f8fafc" font-size="14" font-weight="600">Dashboard</text>
+  <rect x="345" y="58" width="80" height="3" fill="#6366f1" rx="1.5" />
+  <text x="460" y="38" fill="#94a3b8" font-size="14" font-weight="500">Analytics</text>
+  <text x="560" y="38" fill="#94a3b8" font-size="14" font-weight="500">Activity Feed</text>
+  <text x="670" y="38" fill="#94a3b8" font-size="14" font-weight="500">Governance</text>
+
+  <!-- Right Wallet Button -->
+  <rect x="1000" y="16" width="168" height="36" rx="18" fill="#1e293b" stroke="#475569" stroke-width="1" />
+  <circle cx="1020" cy="34" r="5" fill="#10b981" />
+  <text x="1034" y="38" fill="#e2e8f0" font-size="12" font-family="monospace">GBC5...7K8P (1,450 XLM)</text>
+
+  <!-- Page Header -->
+  <text x="48" y="112" fill="#ffffff" font-size="24" font-weight="800">Procurement Vendor Registry</text>
+  <text x="48" y="132" fill="#94a3b8" font-size="13">On-chain score tracking &amp; Soroban smart contract review management</text>
+
+  <!-- Stat Summary Cards -->
+  <!-- Card 1 -->
+  <rect x="48" y="152" width="260" height="96" rx="16" fill="url(#cardGrad)" stroke="#334155" stroke-width="1" />
+  <text x="72" y="180" fill="#94a3b8" font-size="12" font-weight="500">Total Registered Vendors</text>
+  <text x="72" y="218" fill="#ffffff" font-size="30" font-weight="800">28</text>
+  <rect x="230" y="172" width="54" height="22" rx="11" fill="#065f46" opacity="0.6" />
+  <text x="257" y="187" fill="#34d399" font-size="11" font-weight="700" text-anchor="middle">+14%</text>
+
+  <!-- Card 2 -->
+  <rect x="328" y="152" width="260" height="96" rx="16" fill="url(#cardGrad)" stroke="#334155" stroke-width="1" />
+  <text x="352" y="180" fill="#94a3b8" font-size="12" font-weight="500">On-Chain Average Score</text>
+  <text x="352" y="218" fill="#38bdf8" font-size="30" font-weight="800">91.4 / 100</text>
+  <rect x="510" y="172" width="54" height="22" rx="11" fill="#075985" opacity="0.6" />
+  <text x="537" y="187" fill="#38bdf8" font-size="11" font-weight="700" text-anchor="middle">Optimal</text>
+
+  <!-- Card 3 -->
+  <rect x="608" y="152" width="260" height="96" rx="16" fill="url(#cardGrad)" stroke="#334155" stroke-width="1" />
+  <text x="632" y="180" fill="#94a3b8" font-size="12" font-weight="500">Total Verified Reviews</text>
+  <text x="632" y="218" fill="#ffffff" font-size="30" font-weight="800">142</text>
+  <rect x="790" y="172" width="54" height="22" rx="11" fill="#312e81" opacity="0.6" />
+  <text x="817" y="187" fill="#a5b4fc" font-size="11" font-weight="700" text-anchor="middle">Soroban</text>
+
+  <!-- Card 4 -->
+  <rect x="888" y="152" width="264" height="96" rx="16" fill="url(#cardGrad)" stroke="#334155" stroke-width="1" />
+  <text x="912" y="180" fill="#94a3b8" font-size="12" font-weight="500">Inter-Contract Triggers</text>
+  <text x="912" y="218" fill="#f97316" font-size="30" font-weight="800">100% Sync</text>
+  <rect x="1070" y="172" width="58" height="22" rx="11" fill="#7c2d12" opacity="0.6" />
+  <text x="1099" y="187" fill="#fdba74" font-size="11" font-weight="700" text-anchor="middle">Active</text>
+
+  <!-- Vendor Directory Table -->
+  <rect x="48" y="272" width="1104" height="360" rx="16" fill="url(#cardGrad)" stroke="#334155" stroke-width="1" />
+  
+  <!-- Table Header Bar -->
+  <text x="76" y="306" fill="#ffffff" font-size="16" font-weight="700">Active Vendor Directory &amp; Performance</text>
+  <rect x="940" y="286" width="188" height="34" rx="8" fill="url(#primaryGrad)" />
+  <text x="1034" y="308" fill="#ffffff" font-size="12" font-weight="700" text-anchor="middle">+ Register New Vendor</text>
+
+  <!-- Table Column Names -->
+  <rect x="64" y="332" width="1072" height="32" rx="6" fill="#0f172a" />
+  <text x="80" y="353" fill="#64748b" font-size="11" font-weight="700">VENDOR NAME</text>
+  <text x="300" y="353" fill="#64748b" font-size="11" font-weight="700">CATEGORY</text>
+  <text x="500" y="353" fill="#64748b" font-size="11" font-weight="700">STATUS</text>
+  <text x="650" y="353" fill="#64748b" font-size="11" font-weight="700">AVG SCORE</text>
+  <text x="800" y="353" fill="#64748b" font-size="11" font-weight="700">REVIEWS</text>
+  <text x="960" y="353" fill="#64748b" font-size="11" font-weight="700">ACTION</text>
+
+  <!-- Row 1 -->
+  <line x1="64" y1="416" x2="1136" y2="416" stroke="#1e293b" stroke-width="1" />
+  <circle cx="92" cy="390" r="16" fill="#312e81" />
+  <text x="92" y="395" fill="#a5b4fc" font-size="12" font-weight="700" text-anchor="middle">AC</text>
+  <text x="120" y="390" fill="#f8fafc" font-size="14" font-weight="600">Acme Cloud Solutions</text>
+  <text x="120" y="405" fill="#64748b" font-size="11">ID: #001 • Added 3 days ago</text>
+  <text x="300" y="395" fill="#cbd5e1" font-size="13">Cloud Infrastructure</text>
+  <rect x="500" y="380" width="76" height="22" rx="11" fill="#065f46" opacity="0.5" />
+  <text x="538" y="395" fill="#34d399" font-size="11" font-weight="700" text-anchor="middle">ACTIVE</text>
+  <text x="650" y="395" fill="#38bdf8" font-size="15" font-weight="800">94.2 / 100</text>
+  <text x="800" y="395" fill="#cbd5e1" font-size="13">24 reviews</text>
+  <rect x="960" y="380" width="130" height="26" rx="6" fill="#334155" />
+  <text x="1025" y="397" fill="#ffffff" font-size="11" font-weight="600" text-anchor="middle">Evaluate Vendor</text>
+
+  <!-- Row 2 -->
+  <line x1="64" y1="480" x2="1136" y2="480" stroke="#1e293b" stroke-width="1" />
+  <circle cx="92" cy="454" r="16" fill="#7c2d12" />
+  <text x="92" y="459" fill="#fdba74" font-size="12" font-weight="700" text-anchor="middle">SL</text>
+  <text x="120" y="454" fill="#f8fafc" font-size="14" font-weight="600">Stellar Logistics Global</text>
+  <text x="120" y="469" fill="#64748b" font-size="11">ID: #002 • Added 1 week ago</text>
+  <text x="300" y="459" fill="#cbd5e1" font-size="13">Supply Chain &amp; Freight</text>
+  <rect x="500" y="444" width="76" height="22" rx="11" fill="#065f46" opacity="0.5" />
+  <text x="538" y="459" fill="#34d399" font-size="11" font-weight="700" text-anchor="middle">ACTIVE</text>
+  <text x="650" y="459" fill="#38bdf8" font-size="15" font-weight="800">89.8 / 100</text>
+  <text x="800" y="459" fill="#cbd5e1" font-size="13">18 reviews</text>
+  <rect x="960" y="444" width="130" height="26" rx="6" fill="#334155" />
+  <text x="1025" y="461" fill="#ffffff" font-size="11" font-weight="600" text-anchor="middle">Evaluate Vendor</text>
+
+  <!-- Row 3 -->
+  <circle cx="92" cy="518" r="16" fill="#1e3a8a" />
+  <text x="92" y="523" fill="#93c5fd" font-size="12" font-weight="700" text-anchor="middle">NT</text>
+  <text x="120" y="518" fill="#f8fafc" font-size="14" font-weight="600">Nexus Tech Hardware</text>
+  <text x="120" y="533" fill="#64748b" font-size="11">ID: #003 • Added 2 weeks ago</text>
+  <text x="300" y="523" fill="#cbd5e1" font-size="13">Hardware Procurement</text>
+  <rect x="500" y="508" width="84" height="22" rx="11" fill="#854d0e" opacity="0.5" />
+  <text x="542" y="523" fill="#fde047" font-size="11" font-weight="700" text-anchor="middle">PROBATION</text>
+  <text x="650" y="523" fill="#f97316" font-size="15" font-weight="800">76.5 / 100</text>
+  <text x="800" y="523" fill="#cbd5e1" font-size="13">12 reviews</text>
+  <rect x="960" y="508" width="130" height="26" rx="6" fill="#334155" />
+  <text x="1025" y="525" fill="#ffffff" font-size="11" font-weight="600" text-anchor="middle">Evaluate Vendor</text>
+
+  <!-- Footer Watermark -->
+  <text x="600" y="650" fill="#475569" font-size="11" text-anchor="middle">Stellar Soroban Smart Contract Architecture • VendorPulse Production UI</text>
+</svg>
