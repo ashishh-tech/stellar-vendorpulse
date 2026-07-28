@@ -149,7 +149,7 @@ export function ConnectWalletButton() {
 
 VendorPulse incorporates multi-channel user feedback collection:
 
-1. **Google Form Feedback**: Users can submit platform feedback via the embedded Google Form link: [VendorPulse Google Form Feedback](https://forms.google.com/vendorpulse-feedback).
+1. **Google Form Feedback**: Users can submit platform feedback via the embedded Google Form link: [https://forms.google.com/vendorpulse-feedback](https://docs.google.com/spreadsheets/d/1jtEFlcepmKKxlf5D2lGVwK-nCd6itg74fY83H2u1Ed8/edit?usp=sharing)).
 2. **Google Sheets / Excel Live Telemetry**: All feedback entries can be viewed or exported as CSV/Excel directly from the `/settings` page.
 3. **In-App Live Feedback Module**: An interactive React component ([UserFeedbackSummary.tsx](file:///c:/Users/name/Desktop/stellar-vendorpulse/src/components/UserFeedbackSummary.tsx)) allows users to rate and submit reviews directly in the Web App.
 
