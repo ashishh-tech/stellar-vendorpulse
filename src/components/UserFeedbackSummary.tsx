@@ -79,8 +79,8 @@ export function UserFeedbackSummary() {
   const [submitted, setSubmitted] = useState(false);
 
   // Google Form & Excel Sheet URLs
-  const GOOGLE_FORM_URL = 'https://forms.google.com/vendorpulse-feedback';
-  const GOOGLE_SHEETS_EXCEL_URL = 'https://docs.google.com/spreadsheets/d/vendorpulse-feedback-responses/edit';
+  const GOOGLE_FORM_URL = 'https://forms.gle/x428615oV3BA1tg3A';
+  const GOOGLE_SHEETS_EXCEL_URL = 'https://docs.google.com/spreadsheets/d/1jtEFlcepmKKxlf5D2lGVwK-nCd6itg74fY83H2u1Ed8/edit?usp=sharing';
   const PITCH_DECK_URL = '/VendorPulse_Pitch_Deck.pptx';
 
   const handleSubmit = (e: React.FormEvent) => {
