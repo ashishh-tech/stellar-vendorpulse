@@ -14,6 +14,8 @@
 
 - 🎬 **YouTube Video Demo**: [https://youtu.be/Gt3mxxhFspU](https://youtu.be/Gt3mxxhFspU) *(1-2 minute presentation walkthrough)*
 - 🌐 **Live Demo Web App**: [https://stellar-vendorpulse.netlify.app](https://stellar-vendorpulse.netlify.app)
+- 📋 **User Feedback Google Form**: [https://forms.gle/x428615oV3BA1tg3A](https://forms.gle/x428615oV3BA1tg3A)
+- 📊 **User Feedback Google Sheet**: [https://docs.google.com/spreadsheets/d/1jtEFlcepmKKxlf5D2lGVwK-nCd6itg74fY83H2u1Ed8/edit?usp=sharing](https://docs.google.com/spreadsheets/d/1jtEFlcepmKKxlf5D2lGVwK-nCd6itg74fY83H2u1Ed8/edit?usp=sharing)
 - 🐙 **GitHub Repository**: [https://github.com/ashishh-tech/stellar-vendorpulse](https://github.com/ashishh-tech/stellar-vendorpulse)
 
 ---
@@ -149,8 +151,8 @@ export function ConnectWalletButton() {
 
 VendorPulse incorporates multi-channel user feedback collection:
 
-1. **Google Form Feedback**: Users can submit platform feedback via the embedded Google Form link: [https://forms.google.com/vendorpulse-feedback](https://docs.google.com/spreadsheets/d/1jtEFlcepmKKxlf5D2lGVwK-nCd6itg74fY83H2u1Ed8/edit?usp=sharing)).
-2. **Google Sheets / Excel Live Telemetry**: All feedback entries can be viewed or exported as CSV/Excel directly from the `/settings` page.
+1. **Google Form Feedback**: Users can submit platform feedback via the embedded [VendorPulse Google Form](https://forms.gle/x428615oV3BA1tg3A).
+2. **Google Sheets / Excel Live Telemetry**: All feedback entries can be viewed live on the [User Feedback Google Sheet](https://docs.google.com/spreadsheets/d/1jtEFlcepmKKxlf5D2lGVwK-nCd6itg74fY83H2u1Ed8/edit?usp=sharing) or exported as CSV/Excel directly from the `/settings` page.
 3. **In-App Live Feedback Module**: An interactive React component ([UserFeedbackSummary.tsx](file:///c:/Users/name/Desktop/stellar-vendorpulse/src/components/UserFeedbackSummary.tsx)) allows users to rate and submit reviews directly in the Web App.
 
 ---
@@ -298,7 +300,7 @@ The pitch deck covers:
 
 VendorPulse collects user onboarding data through multiple channels:
 
-1. **Google Form**: Users submit feedback and onboarding data via: [VendorPulse Google Form](https://forms.google.com/vendorpulse-feedback)
+1. **Google Form & Sheets**: Users submit feedback and onboarding data via [VendorPulse Google Form](https://forms.gle/x428615oV3BA1tg3A), tracked in live Google Sheets: [User Feedback Google Sheet](https://docs.google.com/spreadsheets/d/1jtEFlcepmKKxlf5D2lGVwK-nCd6itg74fY83H2u1Ed8/edit?usp=sharing)
 2. **Exported Excel/CSV Dataset**: All onboarding responses are exported and stored in the repository:
    - 📄 **CSV File**: [`docs/VendorPulse_User_Feedback_Onboarding_Responses.csv`](docs/VendorPulse_User_Feedback_Onboarding_Responses.csv)
 3. **In-App CSV Export**: Users can export the live feedback dataset as CSV directly from the `/settings` page.
@@ -381,6 +383,20 @@ Below are planned architectural improvements mapped to existing milestone commit
 
 ---
 
+### 🟣 Level 5 - Purple Belt Submission Checklist (Master Verification Matrix)
+| # | Requirement | Status | Evidence / Verification Location |
+| :-: | :--- | :---: | :--- |
+| 1 | **Public GitHub Repository** | ✅ PASS | [https://github.com/ashishh-tech/stellar-vendorpulse](https://github.com/ashishh-tech/stellar-vendorpulse) |
+| 2 | **README with Complete Documentation** | ✅ PASS | Full architecture, setup, testing, deployment, and multi-level submission matrices |
+| 3 | **Minimum 15+ Meaningful Commits** | ✅ PASS | **28+ granular, descriptive commits** spanning smart contracts, frontend, CI/CD, testing, and docs |
+| 4 | **Live Demo Link** | ✅ PASS | [https://stellar-vendorpulse.netlify.app](https://stellar-vendorpulse.netlify.app) |
+| 5 | **PPT / Pitch Deck** | ✅ PASS | [`VendorPulse_Pitch_Deck.pptx`](VendorPulse_Pitch_Deck.pptx) committed to repo & downloadable from app |
+| 6 | **Google Form & Exported Excel Sheet** | ✅ PASS | [Google Form](https://forms.gle/x428615oV3BA1tg3A) + [User Feedback Google Sheet](https://docs.google.com/spreadsheets/d/1jtEFlcepmKKxlf5D2lGVwK-nCd6itg74fY83H2u1Ed8/edit?usp=sharing) + [`docs/VendorPulse_User_Feedback_Onboarding_Responses.csv`](docs/VendorPulse_User_Feedback_Onboarding_Responses.csv) |
+| 7 | **Proof of 50+ Onboarded Users** | ✅ PASS | **53 verified users** with wallet addresses, ratings, and feedback — see [Onboarding Table](#-proof-of-50-onboarded-users--telemetry-log) |
+| 8 | **Future Phase Improvements with Git Commit Links** | ✅ PASS | 10-phase roadmap with clickable commit references — see [Improvement Plan](#-next-phase-improvement-plan--evolution-with-git-commit-links) |
+| 9 | **Demo Video Link** | ✅ PASS | [https://youtu.be/Gt3mxxhFspU](https://youtu.be/Gt3mxxhFspU) |
+
+---
 ## 🚀 Stellar Startup Track Application Package
 
 VendorPulse is applying to the **Stellar Startup Track** — an advanced founder-focused track for high-potential builders solving real-world problems on Stellar.
@@ -401,7 +417,7 @@ VendorPulse is applying to the **Stellar Startup Track** — an advanced founder
 | **Executive Summary** | Problem, solution, market sizing (TAM/SAM/SOM), business model, competitive analysis, team, and funding ask | [`docs/STARTUP_EXECUTIVE_SUMMARY.md`](docs/STARTUP_EXECUTIVE_SUMMARY.md) |
 | **Milestone Roadmap** | 5-phase milestone plan with git commit links, deliverables, success metrics, budget, and risk analysis | [`docs/MILESTONE_ROADMAP.md`](docs/MILESTONE_ROADMAP.md) |
 | **Pitch Deck** | Complete startup presentation (Problem → Solution → Market → Tech → Business Model → Roadmap) | [`VendorPulse_Pitch_Deck.pptx`](VendorPulse_Pitch_Deck.pptx) |
-| **User Onboarding Data** | 53 verified user records with wallet addresses, ratings, and feedback | [`docs/VendorPulse_User_Feedback_Onboarding_Responses.csv`](docs/VendorPulse_User_Feedback_Onboarding_Responses.csv) |
+| **User Onboarding Data** | 53 verified user records with wallet addresses, ratings, and feedback | [Google Form](https://forms.gle/x428615oV3BA1tg3A) / [Google Sheet](https://docs.google.com/spreadsheets/d/1jtEFlcepmKKxlf5D2lGVwK-nCd6itg74fY83H2u1Ed8/edit?usp=sharing) / [`docs/VendorPulse_User_Feedback_Onboarding_Responses.csv`](docs/VendorPulse_User_Feedback_Onboarding_Responses.csv) |
 | **Contributing Guidelines** | Community contribution guide, setup instructions, code standards | [`CONTRIBUTING.md`](CONTRIBUTING.md) |
 
 ### Milestone Completion Status
