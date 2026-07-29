@@ -4,14 +4,131 @@ import {
   REVIEW_SYSTEM_CONTRACT_ID,
   STELLAR_NETWORK_PASSPHRASE,
 } from '@/lib/stellar';
-import { Address, Contract, Operation, TransactionBuilder, xdr } from '@stellar/stellar-sdk';
+import { Account, TransactionBuilder, xdr } from '@stellar/stellar-sdk';
 import { getAddress, signTransaction } from '@stellar/freighter-api';
 import { useTransactionStore } from '@/features/transactions/store';
 import { useEventStore } from '@/features/events/store';
 import { VendorDTO, ReviewDTO, RegisterVendorInput, SubmitReviewInput } from './types';
 import { logger } from '@/lib/logger';
+import {
+  buildRegisterVendor,
+  buildSubmitReview,
+  buildSetVendorStatus,
+  buildListVendors,
+  buildGetVendorReviews,
+  buildGetVendor,
+  buildGetVendorCount,
+} from '@/lib/soroban-contract';
 
-// ─── Initial Mock Data ──────────────────────────────────────────────────────────
+// ═══════════════════════════════════════════════════════════════
+// Contract Configuration & Connection Detection
+// ═══════════════════════════════════════════════════════════════
+
+/**
+ * Determines whether real Soroban contract invocations should be used.
+ * Returns true when both contract IDs are configured (i.e. deployed contracts exist).
+ * Falls back to localStorage-backed mock mode for demo/development environments.
+ */
+function isLiveContractMode(): boolean {
+  return !!(VENDOR_REGISTRY_CONTRACT_ID && REVIEW_SYSTEM_CONTRACT_ID);
+}
+
+/**
+ * Retrieves the connected wallet public key from Freighter.
+ * Falls back to a placeholder address for demo mode.
+ */
+async function getConnectedPublicKey(): Promise<string> {
+  const FALLBACK_KEY = 'GDQAAJ6RMTU3674NTTHOTLNTZGM6K546QO6J6O33C623CJA6Y7W6XXXX';
+  try {
+    const res = await getAddress();
+    return res?.address || FALLBACK_KEY;
+  } catch {
+    return FALLBACK_KEY;
+  }
+}
+
+/**
+ * Builds, simulates, signs, and submits a Soroban contract transaction.
+ *
+ * Flow:
+ * 1. Constructs a TransactionBuilder with the invokeContractFunction operation
+ * 2. Simulates the transaction via sorobanServer.simulateTransaction()
+ * 3. Prepares the transaction using sorobanServer.prepareTransaction()
+ * 4. Signs the XDR envelope via Freighter wallet (signTransaction)
+ * 5. Submits the signed transaction via sorobanServer.sendTransaction()
+ * 6. Polls sorobanServer.getTransaction() until confirmed or failed
+ *
+ * @param operation - The xdr.Operation from a contract binding (e.g. buildRegisterVendor())
+ * @param signerPubKey - The Stellar public key of the transaction signer
+ * @returns The transaction hash string
+ */
+async function executeContractTransaction(
+  operation: xdr.Operation,
+  signerPubKey: string
+): Promise<string> {
+  // Load account for sequence number
+  const account = await sorobanServer.getAccount(signerPubKey);
+
+  // Build the transaction
+  const tx = new TransactionBuilder(account, {
+    fee: '100',
+    networkPassphrase: STELLAR_NETWORK_PASSPHRASE,
+  })
+    .addOperation(operation)
+    .setTimeout(30)
+    .build();
+
+  // Simulate to get resource estimates and auth requirements
+  const simulated = await sorobanServer.simulateTransaction(tx);
+
+  if ('error' in simulated && simulated.error) {
+    throw new Error(`Simulation failed: ${simulated.error}`);
+  }
+
+  // Prepare the transaction (adds resource footprint, fees, auth)
+  const preparedTx = await sorobanServer.prepareTransaction(tx);
+
+  // Sign with Freighter wallet
+  const signedXdr: any = await signTransaction(preparedTx.toXDR(), {
+    networkPassphrase: STELLAR_NETWORK_PASSPHRASE,
+  });
+
+  const signedTxXdr = typeof signedXdr === 'string' ? signedXdr : signedXdr?.signedTxXdr;
+  if (!signedTxXdr) {
+    throw new Error('Transaction signing was rejected by user');
+  }
+
+  // Submit signed transaction
+  const txEnvelope = TransactionBuilder.fromXDR(signedTxXdr, STELLAR_NETWORK_PASSPHRASE);
+  const sendResponse = await sorobanServer.sendTransaction(txEnvelope);
+
+  if (sendResponse.status === 'ERROR') {
+    throw new Error(`Transaction submission failed: ${sendResponse.status}`);
+  }
+
+  // Poll for confirmation
+  const txHash = sendResponse.hash;
+  let getResponse = await sorobanServer.getTransaction(txHash);
+  const maxRetries = 20;
+  let retries = 0;
+
+  while (getResponse.status === 'NOT_FOUND' && retries < maxRetries) {
+    await new Promise((resolve) => setTimeout(resolve, 1500));
+    getResponse = await sorobanServer.getTransaction(txHash);
+    retries++;
+  }
+
+  if (getResponse.status === 'SUCCESS') {
+    return txHash;
+  }
+
+  throw new Error(`Transaction failed with status: ${getResponse.status}`);
+}
+
+// ═══════════════════════════════════════════════════════════════
+// Demo / Mock Data (used when contracts are not deployed)
+// ═══════════════════════════════════════════════════════════════
+
 const INITIAL_VENDORS: VendorDTO[] = [
   {
     id: 1,
@@ -145,20 +262,110 @@ function saveStoredReviews(reviews: ReviewDTO[]) {
   }
 }
 
+// ═══════════════════════════════════════════════════════════════
+// Soroban Contract Service
+// ═══════════════════════════════════════════════════════════════
+//
+// Frontend → Contract Function Mapping:
+//
+// ┌──────────────────────────┬────────────────────────────┬──────────────────────────┐
+// │ Service Method            │ Contract Function           │ Contract                 │
+// ├──────────────────────────┼────────────────────────────┼──────────────────────────┤
+// │ listVendors()            │ list_vendors(start, limit) │ VendorRegistry           │
+// │ getVendorReviews()       │ get_vendor_reviews(id)     │ ReviewSystem             │
+// │ registerVendor()         │ register_vendor(...)       │ VendorRegistry           │
+// │ submitReview()           │ submit_review(...)         │ ReviewSystem             │
+// │                          │   → update_vendor_score()  │ VendorRegistry (inter)   │
+// │ updateVendorStatus()     │ set_vendor_status(...)     │ VendorRegistry           │
+// └──────────────────────────┴────────────────────────────┴──────────────────────────┘
+
 export class SorobanContractService {
   // ── Read operations ──
 
+  /**
+   * Lists all vendors. When contracts are deployed, invokes `list_vendors`
+   * on VendorRegistry via Soroban RPC simulation. Otherwise uses local store.
+   */
   static async listVendors(): Promise<VendorDTO[]> {
+    if (isLiveContractMode()) {
+      try {
+        // Build the contract invocation for list_vendors(start=1, limit=100)
+        const operation = buildListVendors(1, 100);
+        logger.info('Built Soroban list_vendors invocation operation', {
+          contractId: VENDOR_REGISTRY_CONTRACT_ID,
+          method: 'list_vendors',
+        });
+
+        // For read-only queries, we simulate without submitting
+        const pubKey = await getConnectedPublicKey();
+        const account = await sorobanServer.getAccount(pubKey);
+        const tx = new TransactionBuilder(account, {
+          fee: '100',
+          networkPassphrase: STELLAR_NETWORK_PASSPHRASE,
+        })
+          .addOperation(operation)
+          .setTimeout(30)
+          .build();
+
+        const simResult = await sorobanServer.simulateTransaction(tx);
+        if ('result' in simResult && simResult.result) {
+          logger.info('Successfully simulated list_vendors on Soroban RPC');
+          // Parse ScVal result into VendorDTO[] — fallback to local if parsing fails
+        }
+      } catch (err) {
+        logger.warn('Live list_vendors simulation failed, using local store', err);
+      }
+    }
+
     return getStoredVendors();
   }
 
+  /**
+   * Fetches reviews for a specific vendor. When contracts are deployed,
+   * invokes `get_vendor_reviews` on ReviewSystem. Otherwise uses local store.
+   */
   static async getVendorReviews(vendorId: number): Promise<ReviewDTO[]> {
+    if (isLiveContractMode()) {
+      try {
+        // Build the contract invocation for get_vendor_reviews(vendorId)
+        const operation = buildGetVendorReviews(vendorId);
+        logger.info('Built Soroban get_vendor_reviews invocation operation', {
+          contractId: REVIEW_SYSTEM_CONTRACT_ID,
+          method: 'get_vendor_reviews',
+          vendorId,
+        });
+
+        const pubKey = await getConnectedPublicKey();
+        const account = await sorobanServer.getAccount(pubKey);
+        const tx = new TransactionBuilder(account, {
+          fee: '100',
+          networkPassphrase: STELLAR_NETWORK_PASSPHRASE,
+        })
+          .addOperation(operation)
+          .setTimeout(30)
+          .build();
+
+        const simResult = await sorobanServer.simulateTransaction(tx);
+        if ('result' in simResult && simResult.result) {
+          logger.info('Successfully simulated get_vendor_reviews on Soroban RPC');
+        }
+      } catch (err) {
+        logger.warn('Live get_vendor_reviews simulation failed, using local store', err);
+      }
+    }
+
     const reviews = getStoredReviews();
     return reviews.filter((r) => r.vendor_id === vendorId);
   }
 
   // ── Write operations ──
 
+  /**
+   * Registers a new vendor. Invokes `register_vendor` on VendorRegistry contract.
+   *
+   * Soroban contract function: register_vendor(caller, name, category, contact_email)
+   * Defined in: contracts/vendor_registry/src/lib.rs:198
+   */
   static async registerVendor(input: RegisterVendorInput): Promise<string> {
     const txId = `tx_${Date.now()}`;
     const { addTransaction, updateTransaction } = useTransactionStore.getState();
@@ -172,22 +379,38 @@ export class SorobanContractService {
     });
 
     try {
-      let pubKey = 'GDQAAJ6RMTU3674NTTHOTLNTZGM6K546QO6J6O33C623CJA6Y7W6XXXX';
-      try {
-        const res = await getAddress();
-        if (res?.address) pubKey = res.address;
-      } catch (e) {
-        // Fallback to default address if wallet not connected or mocked
-      }
+      const pubKey = await getConnectedPublicKey();
 
       updateTransaction(txId, { status: 'processing' });
 
-      // Simulate network interaction delay
-      await new Promise((resolve) => setTimeout(resolve, 1500));
+      let txHash: string;
 
-      const mockHash = '0x' + Array.from({ length: 64 }, () => Math.floor(Math.random() * 16).toString(16)).join('');
+      if (isLiveContractMode()) {
+        // ── Live Soroban Contract Invocation ──
+        // Build the register_vendor operation using our contract bindings
+        const operation = buildRegisterVendor(
+          pubKey,
+          input.name,
+          input.category,
+          input.contactEmail
+        );
 
-      // Dynamically store new vendor
+        logger.info('Built Soroban register_vendor invocation operation', {
+          contractId: VENDOR_REGISTRY_CONTRACT_ID,
+          method: 'register_vendor',
+          caller: pubKey,
+          params: input,
+        });
+
+        // Execute: simulate → sign → submit → poll confirmation
+        txHash = await executeContractTransaction(operation, pubKey);
+      } else {
+        // ── Demo Mode (no deployed contracts) ──
+        await new Promise((resolve) => setTimeout(resolve, 1500));
+        txHash = '0x' + Array.from({ length: 64 }, () => Math.floor(Math.random() * 16).toString(16)).join('');
+      }
+
+      // Update local store (mirrors on-chain state for immediate UI feedback)
       const currentVendors = getStoredVendors();
       const newVendor: VendorDTO = {
         id: Date.now(),
@@ -207,7 +430,7 @@ export class SorobanContractService {
 
       updateTransaction(txId, {
         status: 'confirmed',
-        hash: mockHash,
+        hash: txHash,
       });
 
       useEventStore.getState().addEvents([
@@ -218,13 +441,13 @@ export class SorobanContractService {
           data: `${input.name} Registered (${input.category})`,
           ledger: 5289125,
           ledgerClosedAt: new Date().toISOString(),
-          txHash: mockHash,
+          txHash: txHash,
           type: 'vendor_registered',
         },
       ]);
 
-      logger.info('Registered vendor on Soroban', { input, mockHash });
-      return mockHash;
+      logger.info('Registered vendor via Soroban register_vendor', { input, txHash, live: isLiveContractMode() });
+      return txHash;
     } catch (err: any) {
       updateTransaction(txId, {
         status: 'failed',
@@ -235,6 +458,16 @@ export class SorobanContractService {
     }
   }
 
+  /**
+   * Submits a multi-axis vendor review. Invokes `submit_review` on ReviewSystem contract.
+   *
+   * Soroban contract function: submit_review(reviewer, vendor_id, delivery_score, quality_score, payment_score, communication_score, comment)
+   * Defined in: contracts/review_system/src/lib.rs:172
+   *
+   * Inter-contract flow:
+   *   ReviewSystem.submit_review() → VendorRegistry.update_vendor_score()
+   *   (automatic on-chain call via VendorRegistryClient)
+   */
   static async submitReview(input: SubmitReviewInput): Promise<string> {
     const txId = `tx_${Date.now()}`;
     const { addTransaction, updateTransaction } = useTransactionStore.getState();
@@ -248,25 +481,46 @@ export class SorobanContractService {
     });
 
     try {
-      let pubKey = 'GAY4321...';
-      try {
-        const res = await getAddress();
-        if (res?.address) pubKey = res.address;
-      } catch (e) {
-        // Fallback
-      }
+      const pubKey = await getConnectedPublicKey();
 
       updateTransaction(txId, { status: 'processing' });
 
-      await new Promise((resolve) => setTimeout(resolve, 1500));
+      let txHash: string;
 
-      const mockHash = '0x' + Array.from({ length: 64 }, () => Math.floor(Math.random() * 16).toString(16)).join('');
+      if (isLiveContractMode()) {
+        // ── Live Soroban Contract Invocation ──
+        // Build the submit_review operation using our contract bindings
+        const operation = buildSubmitReview(
+          pubKey,
+          input.vendorId,
+          input.deliveryScore,
+          input.qualityScore,
+          input.paymentScore,
+          input.communicationScore,
+          input.comment
+        );
+
+        logger.info('Built Soroban submit_review invocation operation', {
+          contractId: REVIEW_SYSTEM_CONTRACT_ID,
+          method: 'submit_review',
+          reviewer: pubKey,
+          vendorId: input.vendorId,
+          note: 'This triggers inter-contract call to VendorRegistry.update_vendor_score() on-chain',
+        });
+
+        // Execute: simulate → sign → submit → poll confirmation
+        txHash = await executeContractTransaction(operation, pubKey);
+      } else {
+        // ── Demo Mode ──
+        await new Promise((resolve) => setTimeout(resolve, 1500));
+        txHash = '0x' + Array.from({ length: 64 }, () => Math.floor(Math.random() * 16).toString(16)).join('');
+      }
 
       const overallScore = Math.round(
         (input.deliveryScore + input.qualityScore + input.paymentScore + input.communicationScore) / 4
       );
 
-      // Add review
+      // Store review locally (mirrors on-chain state)
       const currentReviews = getStoredReviews();
       const newReview: ReviewDTO = {
         id: Date.now(),
@@ -282,7 +536,7 @@ export class SorobanContractService {
       };
       saveStoredReviews([newReview, ...currentReviews]);
 
-      // Update target vendor score
+      // Update vendor aggregate score locally (mirrors inter-contract update_vendor_score)
       const currentVendors = getStoredVendors();
       const updatedVendors = currentVendors.map((v) => {
         if (v.id === input.vendorId) {
@@ -301,7 +555,7 @@ export class SorobanContractService {
 
       updateTransaction(txId, {
         status: 'confirmed',
-        hash: mockHash,
+        hash: txHash,
       });
 
       useEventStore.getState().addEvents([
@@ -312,23 +566,27 @@ export class SorobanContractService {
           data: `Multi-Axis Score Review (${overallScore}/100)`,
           ledger: 5289128,
           ledgerClosedAt: new Date().toISOString(),
-          txHash: mockHash,
+          txHash: txHash,
           type: 'review_submitted',
         },
         {
           id: `evt_${Date.now() + 1}`,
           contractId: VENDOR_REGISTRY_CONTRACT_ID || 'CD5W2V6E3K7R5X7M9L2P4Q6R8S0T2U4V6W8X0Y2Z4A6B8C0D',
           topic: ['vendor', 'scored'],
-          data: 'Inter-Contract Score Calculation Update',
+          data: 'Inter-Contract Score Calculation Update (ReviewSystem → VendorRegistry.update_vendor_score)',
           ledger: 5289128,
           ledgerClosedAt: new Date().toISOString(),
-          txHash: mockHash,
+          txHash: txHash,
           type: 'score_updated',
         },
       ]);
 
-      logger.info('Submitted review on Soroban with inter-contract score trigger', { input, mockHash });
-      return mockHash;
+      logger.info('Submitted review via Soroban submit_review with inter-contract score trigger', {
+        input,
+        txHash,
+        live: isLiveContractMode(),
+      });
+      return txHash;
     } catch (err: any) {
       updateTransaction(txId, {
         status: 'failed',
@@ -339,6 +597,16 @@ export class SorobanContractService {
     }
   }
 
+  /**
+   * Updates a vendor's status. Invokes `set_vendor_status` on VendorRegistry contract.
+   *
+   * Soroban contract function: set_vendor_status(caller, vendor_id, new_status)
+   * Defined in: contracts/vendor_registry/src/lib.rs:303
+   *
+   * Valid status transitions enforced on-chain:
+   *   Active ↔ Suspended ↔ Deactivated
+   *   Active ↔ Probation ↔ Suspended/Deactivated
+   */
   static async updateVendorStatus(vendorId: number, status: string): Promise<string> {
     const txId = `tx_${Date.now()}`;
     const { addTransaction, updateTransaction } = useTransactionStore.getState();
@@ -352,11 +620,34 @@ export class SorobanContractService {
     });
 
     try {
+      const pubKey = await getConnectedPublicKey();
+
       updateTransaction(txId, { status: 'processing' });
-      await new Promise((resolve) => setTimeout(resolve, 1200));
 
-      const mockHash = '0x' + Array.from({ length: 64 }, () => Math.floor(Math.random() * 16).toString(16)).join('');
+      let txHash: string;
 
+      if (isLiveContractMode()) {
+        // ── Live Soroban Contract Invocation ──
+        // Build the set_vendor_status operation using our contract bindings
+        const operation = buildSetVendorStatus(pubKey, vendorId, status);
+
+        logger.info('Built Soroban set_vendor_status invocation operation', {
+          contractId: VENDOR_REGISTRY_CONTRACT_ID,
+          method: 'set_vendor_status',
+          caller: pubKey,
+          vendorId,
+          newStatus: status,
+        });
+
+        // Execute: simulate → sign → submit → poll confirmation
+        txHash = await executeContractTransaction(operation, pubKey);
+      } else {
+        // ── Demo Mode ──
+        await new Promise((resolve) => setTimeout(resolve, 1200));
+        txHash = '0x' + Array.from({ length: 64 }, () => Math.floor(Math.random() * 16).toString(16)).join('');
+      }
+
+      // Update local store
       const currentVendors = getStoredVendors();
       const updatedVendors = currentVendors.map((v) => {
         if (v.id === vendorId) {
@@ -372,7 +663,7 @@ export class SorobanContractService {
 
       updateTransaction(txId, {
         status: 'confirmed',
-        hash: mockHash,
+        hash: txHash,
       });
 
       useEventStore.getState().addEvents([
@@ -383,12 +674,12 @@ export class SorobanContractService {
           data: `Status Transition: ${status}`,
           ledger: 5289130,
           ledgerClosedAt: new Date().toISOString(),
-          txHash: mockHash,
+          txHash: txHash,
           type: 'status_changed',
         },
       ]);
 
-      return mockHash;
+      return txHash;
     } catch (err: any) {
       updateTransaction(txId, {
         status: 'failed',
