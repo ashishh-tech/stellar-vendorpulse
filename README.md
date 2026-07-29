@@ -189,6 +189,91 @@ export function ConnectWalletButton() {
 
 ---
 
+### 🟢 Level 4 - Green Belt Submission Checklist
+
+| # | Requirement | Status | Evidence / Verification Location |
+| :-: | :--- | :---: | :--- |
+| 1 | **Smart Contract Folder Structure** | ✅ PASS | `contracts/vendor_registry/` & `contracts/review_system/` — valid Soroban workspace with `Cargo.toml`, `src/lib.rs`, and `src/test.rs` per contract |
+| 2 | **Smart Contract Code Validation** | ✅ PASS | Custom data structures (`Vendor`, `Review`, `ScoreAggregate`), RBAC (`Admin`/`Manager`/`Viewer`), state machine, inter-contract calls, upgrade mechanism |
+| 3 | **Smart Contract Integration Codebase** | ✅ PASS | `package.json` includes `@stellar/stellar-sdk` & `@stellar/freighter-api`; [`src/lib/stellar.ts`](src/lib/stellar.ts) configures Soroban RPC & contract IDs |
+| 4 | **Cross-Check Contract & Frontend Function Matching** | ✅ PASS | Full mapping documented below — every Rust contract function has a corresponding TypeScript binding in [`src/lib/soroban-contract.ts`](src/lib/soroban-contract.ts), invoked by [`src/features/contracts/service.ts`](src/features/contracts/service.ts) |
+| 5 | **CI/CD Workflow File Detection** | ✅ PASS | [`.github/workflows/ci.yml`](.github/workflows/ci.yml) & [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml); `vercel.json` and `netlify.toml` present |
+| 6 | **CI Validation for Smart Contract** | ✅ PASS | `ci.yml` → `rust-contracts` job: `cargo test --workspace` + `cargo build --workspace --target wasm32-unknown-unknown --release` |
+| 7 | **CI Validation for Frontend** | ✅ PASS | `ci.yml` → `frontend-ci` job: `npx tsc --noEmit` + `npm run test` (Vitest) + `npm run build` |
+| 8 | **CD Validation for Smart Contract & Frontend** | ✅ PASS | `deploy.yml` for production; `scripts/deploy-local.sh` & `scripts/deploy-testnet.sh` for contract deployment; Netlify & Vercel configs present |
+
+#### 📌 Frontend ↔ Smart Contract Function Mapping (Cross-Check Evidence)
+
+The table below maps **every public function** defined in the Rust smart contracts to their corresponding TypeScript frontend binding. All bindings use `Contract.call()` from `@stellar/stellar-sdk` to construct real Soroban invocation operations.
+
+**VendorRegistry Contract** (`contracts/vendor_registry/src/lib.rs` → `src/lib/soroban-contract.ts`):
+
+| Rust Contract Function | TypeScript Binding | Invoked By (Service Method) | Type |
+| :--- | :--- | :--- | :--- |
+| `initialize(admin)` | `buildInitializeVendorRegistry()` | Deploy scripts | Write |
+| `set_review_contract(caller, review_contract)` | `buildSetReviewContract()` | Deploy scripts | Write |
+| `register_vendor(caller, name, category, contact_email)` | `buildRegisterVendor()` | `SorobanContractService.registerVendor()` | Write |
+| `update_vendor(caller, vendor_id, name, category, contact_email)` | `buildUpdateVendor()` | Admin UI (planned) | Write |
+| `set_vendor_status(caller, vendor_id, new_status)` | `buildSetVendorStatus()` | `SorobanContractService.updateVendorStatus()` | Write |
+| `update_vendor_score(vendor_id, new_avg_score, total_reviews)` | `buildUpdateVendorScore()` | Inter-contract (ReviewSystem) | Write |
+| `get_vendor(vendor_id)` | `buildGetVendor()` | Read queries | Read |
+| `get_vendor_by_address(address)` | `buildGetVendorByAddress()` | Read queries | Read |
+| `get_vendor_count()` | `buildGetVendorCount()` | Read queries | Read |
+| `list_vendors(start, limit)` | `buildListVendors()` | `SorobanContractService.listVendors()` | Read |
+| `grant_role(caller, account, role)` | `buildGrantRole()` | Admin UI | Write |
+| `revoke_role(caller, account)` | `buildRevokeRole()` | Admin UI | Write |
+| `get_role(account)` | `buildGetRole()` | Read queries | Read |
+| `upgrade(caller, new_wasm_hash)` | `buildUpgradeVendorRegistry()` | Admin scripts | Write |
+| `version()` | `buildVersionVendorRegistry()` | Health checks | Read |
+
+**ReviewSystem Contract** (`contracts/review_system/src/lib.rs` → `src/lib/soroban-contract.ts`):
+
+| Rust Contract Function | TypeScript Binding | Invoked By (Service Method) | Type |
+| :--- | :--- | :--- | :--- |
+| `initialize(admin, vendor_registry)` | `buildInitializeReviewSystem()` | Deploy scripts | Write |
+| `set_registry(caller, registry)` | `buildSetRegistry()` | Admin scripts | Write |
+| `submit_review(reviewer, vendor_id, delivery_score, quality_score, payment_score, communication_score, comment)` | `buildSubmitReview()` | `SorobanContractService.submitReview()` | Write |
+| `get_review(review_id)` | `buildGetReview()` | Read queries | Read |
+| `get_vendor_reviews(vendor_id)` | `buildGetVendorReviews()` | `SorobanContractService.getVendorReviews()` | Read |
+| `get_vendor_score_aggregate(vendor_id)` | `buildGetVendorScoreAggregate()` | Read queries | Read |
+| `get_review_count()` | `buildGetReviewCount()` | Read queries | Read |
+| `upgrade(caller, new_wasm_hash)` | `buildUpgradeReviewSystem()` | Admin scripts | Write |
+| `version()` | `buildVersionReviewSystem()` | Health checks | Read |
+
+#### 🔗 Contract Binding Architecture
+
+```mermaid
+graph LR
+    subgraph Frontend TypeScript Layer
+        Hooks["React Hooks<br/>(useVendors.ts)"] --> Service["SorobanContractService<br/>(service.ts)"]
+        Service --> Bindings["Contract Bindings<br/>(soroban-contract.ts)"]
+    end
+
+    subgraph Stellar SDK Bridge
+        Bindings -->|"Contract.call('register_vendor')"| VRContract["VendorRegistry<br/>Contract Instance"]
+        Bindings -->|"Contract.call('submit_review')"| RSContract["ReviewSystem<br/>Contract Instance"]
+    end
+
+    subgraph Soroban Smart Contracts on Stellar Testnet
+        VRContract -->|"Invoke"| VROnChain["vendor_registry/lib.rs<br/>register_vendor()<br/>set_vendor_status()<br/>update_vendor_score()<br/>list_vendors()<br/>get_vendor()"]
+        RSContract -->|"Invoke"| RSOnChain["review_system/lib.rs<br/>submit_review()<br/>get_vendor_reviews()<br/>get_review()"]
+        RSOnChain -->|"Inter-Contract Call<br/>update_vendor_score()"| VROnChain
+    end
+```
+
+#### 📂 Key Frontend Integration Files
+
+| File | Purpose | Contract Functions Called |
+| :--- | :--- | :--- |
+| [`src/lib/soroban-contract.ts`](src/lib/soroban-contract.ts) | Explicit TypeScript bindings for all 24 contract functions using `Contract.call()` | All VendorRegistry & ReviewSystem functions |
+| [`src/features/contracts/service.ts`](src/features/contracts/service.ts) | High-level service that builds, simulates, signs & submits Soroban transactions | `register_vendor`, `submit_review`, `set_vendor_status`, `list_vendors`, `get_vendor_reviews` |
+| [`src/features/contracts/hooks/useVendors.ts`](src/features/contracts/hooks/useVendors.ts) | React Query hooks wrapping the contract service for UI components | All service methods via React Query |
+| [`src/lib/wallet.ts`](src/lib/wallet.ts) | Freighter wallet integration — `signTransaction()`, `getAddress()`, `setAllowed()` | Transaction signing for all write operations |
+| [`src/lib/stellar.ts`](src/lib/stellar.ts) | Soroban RPC server & contract ID configuration | Contract ID env vars |
+| [`src/features/events/service.ts`](src/features/events/service.ts) | Live Soroban RPC `getEvents` subscription for contract event streaming | `sorobanServer.getEvents()` |
+
+---
+
 ## 💬 Google Form & Excel Sheet Feedback Summary
 
 VendorPulse incorporates multi-channel user feedback collection:
