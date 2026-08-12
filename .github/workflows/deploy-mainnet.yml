@@ -1,0 +1,95 @@
+name: Deploy to Mainnet
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirm_mainnet:
+        description: 'Type MAINNET to confirm mainnet deployment'
+        required: true
+        type: string
+
+jobs:
+  deploy-mainnet:
+    name: Deploy Contracts to Stellar Mainnet
+    runs-on: ubuntu-latest
+    if: ${{ github.event.inputs.confirm_mainnet == 'MAINNET' }}
+    environment: mainnet
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Stellar CLI
+        run: |
+          curl -fsSL https://github.com/stellar/stellar-cli/releases/latest/download/stellar-x86_64-unknown-linux-gnu.tar.gz | tar xz
+          sudo mv stellar /usr/local/bin/
+          stellar --version
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: wasm32-unknown-unknown
+
+      - name: Build smart contracts
+        working-directory: contracts
+        run: cargo build --workspace --target wasm32-unknown-unknown --release
+
+      - name: Configure deployer identity
+        run: |
+          echo "${{ secrets.STELLAR_DEPLOYER_SECRET_KEY }}" | stellar keys add vendorpulse-deployer --secret-key --stdin
+
+      - name: Deploy VendorRegistry to Mainnet
+        id: deploy_registry
+        run: |
+          VENDOR_REGISTRY_ID=$(stellar contract deploy \
+            --wasm contracts/target/wasm32-unknown-unknown/release/vendor_registry.wasm \
+            --source vendorpulse-deployer \
+            --network mainnet \
+            -- 2>&1 | tail -1)
+          echo "contract_id=$VENDOR_REGISTRY_ID" >> $GITHUB_OUTPUT
+          echo "✅ VendorRegistry deployed: $VENDOR_REGISTRY_ID"
+
+      - name: Deploy ReviewSystem to Mainnet
+        id: deploy_review
+        run: |
+          REVIEW_SYSTEM_ID=$(stellar contract deploy \
+            --wasm contracts/target/wasm32-unknown-unknown/release/review_system.wasm \
+            --source vendorpulse-deployer \
+            --network mainnet \
+            -- 2>&1 | tail -1)
+          echo "contract_id=$REVIEW_SYSTEM_ID" >> $GITHUB_OUTPUT
+          echo "✅ ReviewSystem deployed: $REVIEW_SYSTEM_ID"
+
+      - name: Initialize and link contracts
+        env:
+          VR_ID: ${{ steps.deploy_registry.outputs.contract_id }}
+          RS_ID: ${{ steps.deploy_review.outputs.contract_id }}
+        run: |
+          DEPLOYER_PK=$(stellar keys public-key vendorpulse-deployer)
+
+          stellar contract invoke --id "$VR_ID" --source vendorpulse-deployer --network mainnet \
+            -- initialize --admin "$DEPLOYER_PK"
+
+          stellar contract invoke --id "$RS_ID" --source vendorpulse-deployer --network mainnet \
+            -- initialize --admin "$DEPLOYER_PK" --vendor_registry "$VR_ID"
+
+          stellar contract invoke --id "$VR_ID" --source vendorpulse-deployer --network mainnet \
+            -- set_review_contract --caller "$DEPLOYER_PK" --review_contract "$RS_ID"
+
+          echo "✅ Contracts initialized and linked on Mainnet"
+
+      - name: Output deployment summary
+        env:
+          VR_ID: ${{ steps.deploy_registry.outputs.contract_id }}
+          RS_ID: ${{ steps.deploy_review.outputs.contract_id }}
+        run: |
+          echo "═══════════════════════════════════════════════════════════"
+          echo "  MAINNET DEPLOYMENT COMPLETE"
+          echo "═══════════════════════════════════════════════════════════"
+          echo "  VendorRegistry: $VR_ID"
+          echo "  ReviewSystem:   $RS_ID"
+          echo ""
+          echo "  Explorer:"
+          echo "    https://stellar.expert/explorer/public/contract/$VR_ID"
+          echo "    https://stellar.expert/explorer/public/contract/$RS_ID"
+          echo "═══════════════════════════════════════════════════════════"

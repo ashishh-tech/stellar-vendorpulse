@@ -15,7 +15,7 @@ import {
 } from '@stellar/freighter-api';
 import { useWalletStore } from '@/features/wallet/store';
 import { SupportedWallet } from '@/features/wallet/types';
-import { fetchAccountBalance, STELLAR_NETWORK } from '@/lib/stellar';
+import { fetchAccountBalance, STELLAR_NETWORK, STELLAR_NETWORK_PASSPHRASE } from '@/lib/stellar';
 import { logger } from '@/lib/logger';
 
 const DEMO_ADDRESS = 'GDT35B9W8X2Z4A6B8C0D1E2F3G4H5I6J7K8L9M0N1P2Q3R4S5T6U7V8W9X6NF';
@@ -112,7 +112,7 @@ export function useWallet() {
       try {
         if (store.walletId === 'freighter' && store.address && !store.address.startsWith('GDT35B')) {
           const res: any = await signTransaction(xdr, {
-            networkPassphrase: 'Test SDF Network ; September 2015',
+            networkPassphrase: STELLAR_NETWORK_PASSPHRASE,
           });
           return typeof res === 'string' ? res : res?.signedTxXdr || xdr;
         }

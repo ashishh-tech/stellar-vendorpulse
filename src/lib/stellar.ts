@@ -1,9 +1,9 @@
 import { rpc, Horizon, Networks } from '@stellar/stellar-sdk';
 
-export const STELLAR_NETWORK = process.env.NEXT_PUBLIC_STELLAR_NETWORK || 'testnet';
-export const STELLAR_RPC_URL = process.env.NEXT_PUBLIC_STELLAR_RPC_URL || 'https://soroban-testnet.stellar.org';
-export const STELLAR_HORIZON_URL = process.env.NEXT_PUBLIC_STELLAR_HORIZON_URL || 'https://horizon-testnet.stellar.org';
-export const STELLAR_NETWORK_PASSPHRASE = process.env.NEXT_PUBLIC_STELLAR_NETWORK_PASSPHRASE || Networks.TESTNET;
+export const STELLAR_NETWORK = process.env.NEXT_PUBLIC_STELLAR_NETWORK || 'mainnet';
+export const STELLAR_RPC_URL = process.env.NEXT_PUBLIC_STELLAR_RPC_URL || 'https://mainnet.sorobanrpc.com';
+export const STELLAR_HORIZON_URL = process.env.NEXT_PUBLIC_STELLAR_HORIZON_URL || 'https://horizon.stellar.org';
+export const STELLAR_NETWORK_PASSPHRASE = process.env.NEXT_PUBLIC_STELLAR_NETWORK_PASSPHRASE || Networks.PUBLIC;
 
 export const VENDOR_REGISTRY_CONTRACT_ID = process.env.NEXT_PUBLIC_VENDOR_REGISTRY_CONTRACT_ID || '';
 export const REVIEW_SYSTEM_CONTRACT_ID = process.env.NEXT_PUBLIC_REVIEW_SYSTEM_CONTRACT_ID || '';
