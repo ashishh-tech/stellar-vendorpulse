@@ -22,7 +22,9 @@ jobs:
           targets: wasm32-unknown-unknown
 
       - name: Install Stellar CLI
-        uses: stellar/stellar-cli@main
+        run: |
+          curl -fsSL https://github.com/stellar/stellar-cli/raw/main/install.sh | sh
+          echo "$HOME/.cargo/bin" >> $GITHUB_PATH
 
       - name: Deploy & Link Contracts on Testnet
         run: |
