@@ -13,6 +13,7 @@ export const Header: React.FC = () => {
     { label: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
     { label: 'Activity Feed', href: '/activity', icon: Radio },
     { label: 'Analytics', href: '/analytics', icon: BarChart3 },
+    { label: 'Advanced (L6)', href: '/advanced', icon: Zap },
     { label: 'Settings', href: '/settings', icon: Settings },
   ];
 
