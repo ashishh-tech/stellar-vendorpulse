@@ -4,6 +4,7 @@ import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { ConnectWalletButton } from '@/features/wallet/ui/ConnectWalletButton';
+import { NetworkStatusBadge } from '@/components/NetworkStatusBadge';
 import { Shield, LayoutDashboard, Radio, BarChart3, Settings, Zap } from 'lucide-react';
 
 export const Header: React.FC = () => {
@@ -60,8 +61,11 @@ export const Header: React.FC = () => {
           })}
         </nav>
 
-        {/* Wallet Button */}
+        {/* Wallet & Telemetry */}
         <div className="flex items-center gap-3">
+          <div className="hidden sm:block">
+            <NetworkStatusBadge />
+          </div>
           <ConnectWalletButton />
         </div>
       </div>
