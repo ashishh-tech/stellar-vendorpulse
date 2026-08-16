@@ -1,0 +1,47 @@
+name: Level 6 Black Belt Verification
+
+on:
+  push:
+    branches: [master, main]
+  pull_request:
+    branches: [master, main]
+  workflow_dispatch:
+
+jobs:
+  level6-verify:
+    name: Verify Level 6 Black Belt Requirements
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Run Full Test Suite (Unit + Integration + Advanced)
+        run: npm test
+
+      - name: Verify Documentation Suite Existence
+        run: |
+          test -f docs/SECURITY_AUDIT_REPORT.md
+          test -f docs/SMART_CONTRACT_FORMAL_VERIFICATION.md
+          test -f docs/TECHNICAL_SPECIFICATION.md
+          test -f docs/USER_GUIDE.md
+          test -f docs/MAINNET_RUNBOOK.md
+          test -f docs/MAINNET_USER_ONBOARDING_PROOF.csv
+          test -f docs/TRANSACTION_ACTIVITY_PROOF.md
+          test -f docs/TWITTER_LAUNCH_POST.md
+          test -f docs/COMMUNITY_CONTRIBUTIONS.md
+          echo "All Level 6 documentation artifacts verified successfully!"
+
+      - name: Verify Next.js Build
+        run: npm run build
